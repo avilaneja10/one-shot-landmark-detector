@@ -4,6 +4,7 @@ import time
 import logging
 from collections import defaultdict
 from tqdm import tqdm
+from oneshotlandmark.utils import login_huggingface
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,8 @@ class ViTModel:
             self.device_str = torch.device("mps" if torch.backends.mps.is_available() else "cuda" if torch.cuda.is_available() else "cpu").type
         else:
             self.device_str = device_str
-            
+
+        login_huggingface()
         self.model = self.__load_model()
         
         self.processor = self.__load_processor()

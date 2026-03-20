@@ -1,9 +1,9 @@
-from embeddings.base import BaseEmbeddingGenerator
+from oneshotlandmark.embeddings.base import BaseEmbeddingGenerator
 import logging
 import time
 import torch
 from PIL import Image
-from utils import load_image
+from oneshotlandmark.utils import load_image
 import torch.nn.functional as F
 
 logger = logging.getLogger(__name__)

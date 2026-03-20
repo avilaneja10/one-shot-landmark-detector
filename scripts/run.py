@@ -1,8 +1,10 @@
-from src.model import ViTModel
-from src.embeddings.patch import PatchEmbeddingGenerator
-from src.embeddings.pixel import PixelEmbeddingGenerator
-from src.scores.generator import ScoreGenerator
-from src.scores.utils import extract_landmark_embeddings, scores_to_matrix, get_landmark_indices
+from oneshotlandmark.model import ViTModel
+from oneshotlandmark.embeddings.patch import PatchEmbeddingGenerator
+from oneshotlandmark.embeddings.pixel import PixelEmbeddingGenerator
+from oneshotlandmark.scores.generator import ScoreGenerator
+from oneshotlandmark.scores.utils import extract_landmark_embeddings, scores_to_matrix, get_landmark_indices, remove_self_2d
+from cp4icl.oneshot import caos, scos, fullcaos
+from cp4icl.model_selection import yk_baseline, yk_adjust, yk_split, modsel_cp, modsel_cp_ub
 import json
 import logging
 import os
@@ -11,6 +13,7 @@ import gc
 import torch
 import numpy as np
 import argparse
+import csv
 
 logger  = logging.getLogger(__name__)
 
@@ -345,14 +348,14 @@ def main():
                              'yk_adjust yk_split modsel_cp modsel_cp_ub), or "all"')
  
     # Paths and infra
-    parser.add_argument("--base_img_path", default="",
+    parser.add_argument("--base_img_path", required=True,
                         help="Base directory prepended to image paths in JSON")
     parser.add_argument("--patch_size", type=int, default=16,
                         help="ViT patch size in pixels")
     parser.add_argument("--device", default="cuda",
                         help="Torch device")
     parser.add_argument("-o", "--output_path", default=None,
-                        help="Path to save results as JSON")
+                        help="Path to save results as csv")
  
     # Logging
     parser.add_argument("--verbose", action="store_true", default=False,
@@ -405,37 +408,46 @@ def main():
     print(f"\n  Total time: {results['total_time_seconds']:.2f}s")
     print("=" * 60)
  
-    # Save results
-    # TODO : Should change to csv 
+    # Save results as CSV — one row per method, appends if file exists.
+    # Fixed columns make it safe to append runs with different methods.
     if args.output_path:
-        os.makedirs(os.path.dirname(args.output_path), exist_ok=True)
+        os.makedirs(os.path.dirname(args.output_path) or ".", exist_ok=True)
  
-        # Record experiment config alongside results
-        output = {
-            "config": {
-                "level": args.level,
-                "landmark_idx": args.landmark_idx,
-                "alpha": args.alpha,
-                "temperature": args.temperature,
-                "patch_size": args.patch_size,
-                "apply_softmax": args.softmax,
-                "normalize": args.normalize,
-                "k": args.k,
-                "methods": sorted(methods),
-                "n_calib": results["n_calib"],
-                "n_test": results["n_test"],
-            },
-            "results": {
-                k: v for k, v in results.items()
-                if k.startswith("coverage_") or k.startswith("avg_set_size_")
-            },
+        fieldnames = [
+            "level", "landmark_idx", "alpha", "temperature", "patch_size",
+            "apply_softmax", "normalize", "k", "n_calib", "n_test",
+            "method", "coverage", "avg_set_size", "total_time_seconds",
+        ]
+ 
+        base_row = {
+            "level": args.level,
+            "landmark_idx": args.landmark_idx,
+            "alpha": args.alpha,
+            "temperature": args.temperature,
+            "patch_size": args.patch_size,
+            "apply_softmax": args.softmax,
+            "normalize": args.normalize,
+            "k": args.k,
+            "n_calib": results["n_calib"],
+            "n_test": results["n_test"],
             "total_time_seconds": results["total_time_seconds"],
         }
  
-        with open(args.output_path, "w") as f:
-            json.dump(output, f, indent=2)
-        logger.info(f"Results saved to {args.output_path}")
+        needs_header = not os.path.exists(args.output_path) or os.path.getsize(args.output_path) == 0
+        with open(args.output_path, "a", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            if needs_header:
+                writer.writeheader()
+            for method in sorted(methods):
+                row = {
+                    **base_row,
+                    "method": method,
+                    "coverage": results.get(f"coverage_{method}", ""),
+                    "avg_set_size": results.get(f"avg_set_size_{method}", ""),
+                }
+                writer.writerow(row)
  
+        logger.info(f"Results saved to {args.output_path}") 
  
 if __name__ == "__main__":
     main()

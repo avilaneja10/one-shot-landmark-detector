@@ -4,7 +4,7 @@ import time
 import logging
 from tqdm import tqdm
 import gc
-from scores.utils import get_landmark_indices, extract_landmark_embeddings, estimate_memory_gb
+from oneshotlandmark.scores.utils import get_landmark_indices, extract_landmark_embeddings, estimate_memory_gb
 
 logger = logging.getLogger(__name__)
 

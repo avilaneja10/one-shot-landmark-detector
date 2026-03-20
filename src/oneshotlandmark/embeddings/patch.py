@@ -1,6 +1,6 @@
-from embeddings.base import BaseEmbeddingGenerator
+from oneshotlandmark.embeddings.base import BaseEmbeddingGenerator
 import torch
-from utils import load_image, pad_to_multiple
+from oneshotlandmark.utils import load_image, pad_to_multiple
 import torch.nn.functional as F
 import logging
 import time
@@ -77,7 +77,7 @@ class PatchEmbeddingGenerator(BaseEmbeddingGenerator):
         patch_tokens = F.normalize(patch_tokens, p=2, dim=1, eps=1e-8)  # (K, D)
  
         # Build pixel-to-patch-index mapping for the original (unpadded) image
-        xy_to_index = self._build_patch_xy_map(orig_w, orig_h, grid_cols, self.patch_size)
+        xy_to_index = self._build_xy_map(orig_w, orig_h, grid_cols)
 
         elapsed = time.perf_counter() - start
         logger.debug(
