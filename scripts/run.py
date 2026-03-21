@@ -1,23 +1,27 @@
-from oneshotlandmark.model import ViTModel
-from oneshotlandmark.embeddings.patch import PatchEmbeddingGenerator
-from oneshotlandmark.embeddings.pixel import PixelEmbeddingGenerator
-from oneshotlandmark.scores.generator import ScoreGenerator
-from oneshotlandmark.scores.utils import extract_landmark_embeddings, scores_to_matrix, get_landmark_indices, remove_self_2d
-from cp4icl.oneshot import caos, scos, fullcaos
-from cp4icl.model_selection import yk_baseline, yk_adjust, yk_split, modsel_cp, modsel_cp_ub
-import json
-import logging
 import os
-import time
 import gc
-import torch
-import numpy as np
-import argparse
 import csv
+import json
+import time
+import logging
+import argparse
+ 
+import numpy as np
+ 
+from oneshotlandmark.pipeline import Pipeline
+from oneshotlandmark.cache.local import LocalCache
+from oneshotlandmark.scores.utils import scores_to_matrix, remove_self_2d, remove_self_3d
+from cp4icl.oneshot import caos, scos, fullcaos
+from cp4icl.model_selection import (
+    yk_baseline, yk_adjust, yk_split, modsel_cp, modsel_cp_ub,
+)
 
-logger  = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
-# REGISTER METHODS
+# ============================================
+# METHODS DIVISION
+# ============================================
+
 ONESHOT_METHODS = {"caos", "scos", "fullcaos"}
 MODSEL_METHODS = {"yk_baseline", "yk_adjust", "yk_split", "modsel_cp", "modsel_cp_ub"}
 ALL_METHODS = ONESHOT_METHODS | MODSEL_METHODS
@@ -60,25 +64,23 @@ def load_data(calib_path, test_path, base_img_path, landmark_idx):
  
     return calib_img_paths, test_img_paths, calib_lms, test_lms
 
-def run(calib_img_paths, test_img_paths, calib_lms, test_lms, level="patch",
-    alpha=0.1, temperature=0.05, patch_size=16, apply_softmax=True,
-    normalize=True, k=3, device="cuda", methods=None):
+# TODO : We have removed normalization as parameter because currently it doesn't support caching
+# We need to implement this at the caching layer as well as at an argument layer
+def run(pipeline, calib_img_paths, test_img_paths, calib_lms, test_lms, alpha=0.1, temperature=0.05, apply_softmax=True,
+        k=3,methods=None):
     """
-    Run conformal prediction pipeline.
+    Run conformal prediction using the pipeline.
  
     Args:
+        pipeline: Initialized Pipeline instance (handles embeddings, cosines, caching).
         calib_img_paths: List of calibration image file paths.
         test_img_paths: List of test image file paths.
         calib_lms: List of [x, y] landmark coordinates for calibration images.
         test_lms: List of [x, y] landmark coordinates for test images.
-        level: Embedding granularity — "patch" or "pixel".
         alpha: Miscoverage level (e.g., 0.1 for 90% coverage target).
         temperature: Softmax temperature for nonconformity scores.
-        patch_size: ViT patch size in pixels.
         apply_softmax: Whether to apply softmax normalization.
-        normalize: Whether to mean-center embeddings before L2 normalization.
         k: Number of nearest sources to average for CAOS/fullCAOS.
-        device: Torch device string.
         methods: Set of CP method names to run.
  
     Returns:
@@ -92,113 +94,85 @@ def run(calib_img_paths, test_img_paths, calib_lms, test_lms, level="patch",
  
     total_start = time.perf_counter()
 
-    # ==================================================================
-    # Phase 1: Model + Embedding Generator
-    # ==================================================================
-    logger.info(f"Initializing model and {level}-level embedding generator")
+    # GENERATE EMBEDDINGS
+    # With embeddings we have pixel/patch matching to it's number [0,1] -> 1
+    # This assumes normalization i.e. subtraction with the mean
+    if pipeline.cosines_cached() and not needs_reverse:
+        # If cosines are already cached skip embedding computation and load cosine scores
+        logger.info("Cosines cached — skipping embedding computation")
+        calib_cosines = pipeline.get_calib_cosines()
+        calib_lm_embs = calib_cosines["lm_embeddings"]
+        eval_cosines = pipeline.get_eval_cosines()
+        test_xy_maps = pipeline.get_xy_maps(test_img_paths, "test")
+    else:
+        # Usual case generate embedddings and then generate cosine scores
+        calib_embs, calib_xy_maps = pipeline.get_embeddings(calib_img_paths, "calib")
+        test_embs, test_xy_maps = pipeline.get_embeddings(test_img_paths, "test")
+        calib_cosines = pipeline.get_calib_cosines(calib_embs, calib_lms, calib_xy_maps)
+        calib_lm_embs = calib_cosines["lm_embeddings"]
+        eval_cosines = pipeline.get_eval_cosines(test_embs, calib_lm_embs)
+    
+    # calib_embs, calib_xy_maps = pipeline.get_embeddings(calib_img_paths, "calib")
+    # test_embs, test_xy_maps = pipeline.get_embeddings(test_img_paths, "test")
 
-    model = ViTModel(device_str=device)
+    # # CALCUALTE RAW COSINE SIMILARITIES
+    # calib_cosines = pipeline.get_calib_cosines(calib_embs, calib_lms, calib_xy_maps)
+    # calib_lm_embs = calib_cosines["lm_embeddings"]
+    # eval_cosines = pipeline.get_eval_cosines(test_embs, calib_lm_embs)
 
-    if level == "patch":
-        emb_gen = PatchEmbeddingGenerator(
-            model=model, patch_size=patch_size, normalize=normalize
-        )
-    elif level == "pixel":
-        emb_gen = PixelEmbeddingGenerator(
-            model=model, patch_size=patch_size, normalize=normalize
+    # BASED ON THE PARAMETERS NOW APPLY THINGS OVER COSINE SIMILARITIES
+    if needs_calib_all:
+        calib_true_matrix, calib_all_matrix = pipeline.get_calib_scores(
+            calib_cosines, temperature=temperature,
+            apply_softmax=apply_softmax, return_all_scores=True,
         )
     else:
-        raise ValueError(f"Unknown level: {level}. Must be 'patch' or 'pixel'.")
-    
-    score_gen = ScoreGenerator(
-        apply_softmax=apply_softmax,
-        temperature=temperature,
-        device=device,
+        calib_true_matrix = pipeline.get_calib_scores(
+            calib_cosines, temperature=temperature,
+            apply_softmax=apply_softmax, return_all_scores=False,
+        )
+
+    eval_scores_list = pipeline.get_eval_scores(
+        eval_cosines, temperature=temperature, apply_softmax=apply_softmax,
     )
 
-    # ==================================================================
-    # Phase 2: Calibration embeddings + scores
-    # ==================================================================
-    logger.info("Generating calibration embeddings")
-    calib_embs, calib_xy_maps = emb_gen.generate_embedding_all(calib_img_paths)
- 
-    calib_lm_embs = extract_landmark_embeddings(calib_lms, calib_embs, calib_xy_maps)
- 
-    logger.info("Computing calibration scores")
-    if needs_calib_all:
-        calib_true_matrix, calib_all_matrix = score_gen.generate_calib_scores(
-            calib_embs, calib_lms, calib_xy_maps, return_all_scores=True
-        )
-    else:
-        calib_true_matrix = score_gen.generate_calib_scores(
-            calib_embs, calib_lms, calib_xy_maps, return_all_scores=False
-        )
-    
-
-    # Free calib embeddings unless needed for reverse scores
-    if not needs_reverse:
-        del calib_embs, calib_xy_maps
-        gc.collect()
-        torch.cuda.empty_cache()
-        logger.info("Freed calibration embeddings")
-
-    # ==================================================================
-    # Phase 3: Test embeddings + evaluation scores
-    # ==================================================================
-    logger.info("Generating test embeddings")
-    test_embs, test_xy_maps = emb_gen.generate_embedding_all(test_img_paths)
- 
-    logger.info("Computing evaluation scores")
-    eval_scores_list = score_gen.generate_eval_scores(test_embs, calib_lm_embs)
+    # CONVERT TO MATRIX FROM LIST
     eval_scores_matrix = scores_to_matrix(eval_scores_list)
     K_max = eval_scores_matrix.shape[2]
- 
+
     del eval_scores_list
     gc.collect()
 
-    # ==================================================================
-    # Phase 4: Reverse scores (fullCAOS only)
-    # CURRENTLY NOT IMPLEMENTED 
-    # ==================================================================
-    # reverse_matrix = None
-    # if needs_reverse:
-    #     logger.info("Computing reverse scores for fullCAOS")
-    #     reverse_matrix = score_gen.generate_reverse_scores(
-    #         test_embs, calib_embs, calib_lms, calib_xy_maps, K_max=K_max
-    #     )
-    #     del calib_embs, calib_xy_maps
-    #     gc.collect()
-    #     torch.cuda.empty_cache()
-    #     logger.info("Freed calibration embeddings after reverse scores")
+    # CALCULATE REVERSE SCORES FOR FULLCAOS
+    # TODO : This is broken as of now
+    reverse_matrix = None
+    if needs_reverse:
+        reverse_matrix = pipeline.get_reverse_scores(
+            test_embs, calib_embs, calib_lms, calib_xy_maps,
+            K_max=K_max, temperature=temperature, apply_softmax=apply_softmax,
+        )
+
+    # GET TEST LABELS
+    test_labels = pipeline.get_test_labels(test_lms, test_xy_maps)
  
-    # Free test embeddings
-    del test_embs
-    gc.collect()
+    k = min(k, len(calib_img_paths)) # This k is for CAOS
 
-
-    # ==================================================================
-    # Phase 5: Test labels
-    # ==================================================================
-    test_labels = np.array(get_landmark_indices(test_lms, test_xy_maps))
-    del test_xy_maps
- 
-    k = min(k, len(calib_img_paths))
-
-    # ==================================================================
-    # Phase 6: Prepare self-removed matrices
-    # ==================================================================
+    # PREPARE FOR CP METHOD CALCULATION
     needs_no_self = bool(methods & ({"scos"} | MODSEL_METHODS))
- 
+
     if needs_no_self:
-        calib_true_no_self = remove_self_2d(calib_true_matrix)  # (N, N-1)
- 
+        calib_true_no_self = remove_self_2d(calib_true_matrix)
+
+    # This is required for having different Ks across images to harmonize them
+    # TODO : The support should be added in cp4icl as with the current method
+    # it overshoots memory
+    
     if needs_calib_all:
-        # Harmonize K: calib and eval images may have different candidate counts
         K_calib = calib_all_matrix.shape[2]
         K_eval = eval_scores_matrix.shape[2]
         if K_calib != K_eval:
             K_unified = max(K_calib, K_eval)
-            logger.info(f"Harmonizing K dimensions: calib={K_calib}, eval={K_eval} -> {K_unified}")
+            logger.info(f"Harmonizing K: calib={K_calib}, eval={K_eval} -> {K_unified}")
             if K_calib < K_unified:
                 calib_all_matrix = np.pad(
                     calib_all_matrix,
@@ -212,13 +186,11 @@ def run(calib_img_paths, test_img_paths, calib_lms, test_lms, level="patch",
                     constant_values=1.1,
                 )
  
-        calib_all_no_self = remove_self_3d(calib_all_matrix)  # (N, N-1, K)
+        calib_all_no_self = remove_self_3d(calib_all_matrix)
         del calib_all_matrix
         gc.collect()
- 
-    # ==================================================================
-    # Phase 7: Run CP methods
-    # ==================================================================
+
+    # RUN CP METHODS
     logger.info(f"Running methods: {sorted(methods)}")
  
     results = {
@@ -325,6 +297,8 @@ def main():
                         help="JSON path for test images")
     parser.add_argument("-l", "--landmark_idx", type=int, required=True,
                         help="Index of the landmark to evaluate")
+    parser.add_argument("--dataset_id", required=True,
+                        help="Identifier for the dataset, used in cache keys")
  
     # Embedding level
     parser.add_argument("--level", choices=["patch", "pixel"], default="patch",
@@ -335,8 +309,6 @@ def main():
                         help="Softmax temperature")
     parser.add_argument("--softmax", action=argparse.BooleanOptionalAction, default=True,
                         help="Apply softmax normalization")
-    parser.add_argument("--normalize", action=argparse.BooleanOptionalAction, default=True,
-                        help="Mean-center embeddings before L2 normalization")
  
     # Conformal prediction
     parser.add_argument("--alpha", type=float, default=0.1,
@@ -348,14 +320,23 @@ def main():
                              'yk_adjust yk_split modsel_cp modsel_cp_ub), or "all"')
  
     # Paths and infra
-    parser.add_argument("--base_img_path", required=True,
+    parser.add_argument("--base_img_path", default="",
                         help="Base directory prepended to image paths in JSON")
     parser.add_argument("--patch_size", type=int, default=16,
                         help="ViT patch size in pixels")
     parser.add_argument("--device", default="cuda",
                         help="Torch device")
     parser.add_argument("-o", "--output_path", default=None,
-                        help="Path to save results as csv")
+                        help="Path to save results as CSV (appends if file exists)")
+ 
+    # Caching
+    parser.add_argument("--cache_dir", default=None,
+                        help="Directory for caching embeddings and cosine scores. "
+                             "If not provided, caching is disabled.")
+    parser.add_argument("--compress", action="store_true", default=False,
+                    help="Gzip compress cache files. Saves disk space but "
+                         "adds overhead to save/load.")
+
  
     # Logging
     parser.add_argument("--verbose", action="store_true", default=False,
@@ -379,20 +360,30 @@ def main():
     # Parse methods
     methods = parse_methods(args.methods)
  
+    # Setup cache
+    cache = LocalCache(args.cache_dir, compress=args.compress) if args.cache_dir else None
+ 
+    # Setup pipeline
+    pipeline = Pipeline(
+        level=args.level,
+        landmark_idx=args.landmark_idx,
+        patch_size=args.patch_size,
+        device=args.device,
+        cache=cache,
+        dataset_id=args.dataset_id,
+    )
+ 
     # Run
     results = run(
+        pipeline=pipeline,
         calib_img_paths=calib_img_paths,
         test_img_paths=test_img_paths,
         calib_lms=calib_lms,
         test_lms=test_lms,
-        level=args.level,
         alpha=args.alpha,
         temperature=args.temperature,
-        patch_size=args.patch_size,
         apply_softmax=args.softmax,
-        normalize=args.normalize,
         k=args.k,
-        device=args.device,
         methods=methods,
     )
  
@@ -409,13 +400,12 @@ def main():
     print("=" * 60)
  
     # Save results as CSV — one row per method, appends if file exists.
-    # Fixed columns make it safe to append runs with different methods.
     if args.output_path:
         os.makedirs(os.path.dirname(args.output_path) or ".", exist_ok=True)
  
         fieldnames = [
             "level", "landmark_idx", "alpha", "temperature", "patch_size",
-            "apply_softmax", "normalize", "k", "n_calib", "n_test",
+            "apply_softmax", "k", "n_calib", "n_test",
             "method", "coverage", "avg_set_size", "total_time_seconds",
         ]
  
@@ -426,7 +416,6 @@ def main():
             "temperature": args.temperature,
             "patch_size": args.patch_size,
             "apply_softmax": args.softmax,
-            "normalize": args.normalize,
             "k": args.k,
             "n_calib": results["n_calib"],
             "n_test": results["n_test"],
@@ -447,7 +436,8 @@ def main():
                 }
                 writer.writerow(row)
  
-        logger.info(f"Results saved to {args.output_path}") 
+        logger.info(f"Results saved to {args.output_path}")
+ 
  
 if __name__ == "__main__":
     main()
