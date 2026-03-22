@@ -2,6 +2,7 @@ from PIL import Image
 from huggingface_hub import login
 import os
 import logging
+import math
 
 logger = logging.getLogger(__name__)
 
@@ -41,3 +42,29 @@ def login_huggingface():
     else:
         logger.info("HF_TOKEN not found in environment, prompting for login")
         login()
+
+def get_image_dims(img_path: str) -> tuple[int, int]:
+    """Read image dimensions from file header without loading pixels."""
+    with Image.open(img_path) as img:
+        return img.size  # (width, height)
+
+def xy_to_index(x, y, orig_w, orig_h, level, patch_size=16):
+    """
+    Convert pixel coordinate (x, y) to flat index in the embedding tensor.
+    This is required to compare the final results and get the embeddings corresponding to
+    a coordinate.
+    
+    Args:
+        x, y: Pixel coordinates in the original image.
+        orig_w, orig_h: Original image dimensions.
+        level: "patch" or "pixel".
+        patch_size: ViT patch size (only used for patch level).
+
+    Returns:
+        Flat index into the (K, D) embedding tensor.
+    """
+    if level == "pixel":
+        return x * orig_h + y
+    else:
+        grid_cols = math.ceil(orig_w / patch_size)
+        return (y // patch_size) * grid_cols + (x // patch_size)

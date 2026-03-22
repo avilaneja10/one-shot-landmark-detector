@@ -10,7 +10,8 @@ import numpy as np
  
 from oneshotlandmark.pipeline import Pipeline
 from oneshotlandmark.cache.local import LocalCache
-from oneshotlandmark.scores.utils import scores_to_matrix, remove_self_2d, remove_self_3d
+from oneshotlandmark.scores.utils import scores_to_matrix, remove_self_2d, remove_self_3d, get_landmark_indices
+from oneshotlandmark.utils import get_image_dims, xy_to_index
 from cp4icl.oneshot import caos, scos, fullcaos
 from cp4icl.model_selection import (
     yk_baseline, yk_adjust, yk_split, modsel_cp, modsel_cp_ub,
@@ -95,30 +96,17 @@ def run(pipeline, calib_img_paths, test_img_paths, calib_lms, test_lms, alpha=0.
     total_start = time.perf_counter()
 
     # GENERATE EMBEDDINGS
-    # With embeddings we have pixel/patch matching to it's number [0,1] -> 1
     # This assumes normalization i.e. subtraction with the mean
     if pipeline.cosines_cached() and not needs_reverse:
-        # If cosines are already cached skip embedding computation and load cosine scores
-        logger.info("Cosines cached — skipping embedding computation")
         calib_cosines = pipeline.get_calib_cosines()
-        calib_lm_embs = calib_cosines["lm_embeddings"]
         eval_cosines = pipeline.get_eval_cosines()
-        test_xy_maps = pipeline.get_xy_maps(test_img_paths, "test")
     else:
-        # Usual case generate embedddings and then generate cosine scores
-        calib_embs, calib_xy_maps = pipeline.get_embeddings(calib_img_paths, "calib")
-        test_embs, test_xy_maps = pipeline.get_embeddings(test_img_paths, "test")
-        calib_cosines = pipeline.get_calib_cosines(calib_embs, calib_lms, calib_xy_maps)
+        calib_embs = pipeline.get_embeddings(calib_img_paths, "calib")
+        test_embs = pipeline.get_embeddings(test_img_paths, "test")
+        calib_image_dims = [get_image_dims(p) for p in calib_img_paths]
+        calib_cosines = pipeline.get_calib_cosines(calib_embs, calib_lms, calib_image_dims)
         calib_lm_embs = calib_cosines["lm_embeddings"]
         eval_cosines = pipeline.get_eval_cosines(test_embs, calib_lm_embs)
-    
-    # calib_embs, calib_xy_maps = pipeline.get_embeddings(calib_img_paths, "calib")
-    # test_embs, test_xy_maps = pipeline.get_embeddings(test_img_paths, "test")
-
-    # # CALCUALTE RAW COSINE SIMILARITIES
-    # calib_cosines = pipeline.get_calib_cosines(calib_embs, calib_lms, calib_xy_maps)
-    # calib_lm_embs = calib_cosines["lm_embeddings"]
-    # eval_cosines = pipeline.get_eval_cosines(test_embs, calib_lm_embs)
 
     # BASED ON THE PARAMETERS NOW APPLY THINGS OVER COSINE SIMILARITIES
     if needs_calib_all:
@@ -145,15 +133,16 @@ def run(pipeline, calib_img_paths, test_img_paths, calib_lms, test_lms, alpha=0.
 
     # CALCULATE REVERSE SCORES FOR FULLCAOS
     # TODO : This is broken as of now
-    reverse_matrix = None
-    if needs_reverse:
-        reverse_matrix = pipeline.get_reverse_scores(
-            test_embs, calib_embs, calib_lms, calib_xy_maps,
-            K_max=K_max, temperature=temperature, apply_softmax=apply_softmax,
-        )
+    # reverse_matrix = None
+    # if needs_reverse:
+    #     reverse_matrix = pipeline.get_reverse_scores(
+    #         test_embs, calib_embs, calib_lms, calib_xy_maps,
+    #         K_max=K_max, temperature=temperature, apply_softmax=apply_softmax,
+    #     )
 
     # GET TEST LABELS
-    test_labels = pipeline.get_test_labels(test_lms, test_xy_maps)
+    test_image_dims = [get_image_dims(p) for p in test_img_paths]
+    test_labels = np.array(get_landmark_indices(test_lms, test_image_dims, pipeline.level, pipeline.patch_size))
  
     k = min(k, len(calib_img_paths)) # This k is for CAOS
 

@@ -19,18 +19,12 @@ import time
 import logging
  
 import torch
-import torch.nn.functional as F
 import numpy as np
  
 from oneshotlandmark.model import ViTModel
 from oneshotlandmark.embeddings.patch import PatchEmbeddingGenerator
 from oneshotlandmark.embeddings.pixel import PixelEmbeddingGenerator
 from oneshotlandmark.scores.generator import ScoreGenerator
-from oneshotlandmark.scores.utils import (
-    extract_landmark_embeddings,
-    get_landmark_indices,
-    scores_to_matrix,
-)
 from oneshotlandmark.cache.base import BaseCache
 
 logger = logging.getLogger(__name__)
@@ -61,7 +55,7 @@ class Pipeline:
         else:
             raise ValueError(f"Unknown level: {level}. Must be 'patch' or 'pixel'.")
  
-        self.score_gen = ScoreGenerator(device=device, verbose=verbose)
+        self.score_gen = ScoreGenerator(device=device, verbose=verbose, level=level, patch_size=patch_size)
 
     # ========================
     # CACHING KEY HELPERS
@@ -96,14 +90,6 @@ class Pipeline:
             return False
         return self.cache.exists(self._embedding_key(split))
 
-    def get_xy_maps(self, img_paths, split):
-        """Get xy_maps only — lightweight, for label computation."""
-        key = self._embedding_key(split) + "_xy_maps"
-        if self.cache and self.cache.exists(key):
-            return self.cache.load(key)
-        # If not cached separately, fall back to full embedding computation
-        _, xy_maps = self.get_embeddings(img_paths, split)
-        return xy_maps
     
     def get_embeddings(self, img_paths, split):
         """
@@ -115,34 +101,29 @@ class Pipeline:
  
         Returns:
             embeddings: List of (K_i, D) tensors.
-            xy_maps: List of dicts mapping (x, y) -> index.
         """
         emb_key = self._embedding_key(split)
-        map_key = emb_key + "_xy_maps"
 
-        # THIS ASSUMES THAT IF EMBEDDINGS EXISTSS THEN MAP WILL ALSO EXISTS
+        # Try to load embeddings from the cache if exists
         if self.cache and self.cache.exists(emb_key):
             embeddings = self.cache.load(emb_key)
-            xy_maps = self.cache.load(map_key)
-            return data["embeddings"], data["xy_maps"]
+            return embeddings
  
         logger.info(f"Computing embeddings for {split} ({len(img_paths)} images)")
-        embeddings, xy_maps = self.emb_gen.generate_embedding_all(img_paths)
+        embeddings = self.emb_gen.generate_embedding_all(img_paths)
  
         if self.cache:
             self.cache.save(emb_key, embeddings)        # 25 GB — loaded only when needed
-            self.cache.save(map_key, xy_maps)              # ~5 MB — loaded for labels
  
-        return embeddings, xy_maps
+        return embeddings
     
-    def get_calib_cosines(self, calib_embeddings=None, calib_landmarks=None, calib_xy_maps=None):
+    def get_calib_cosines(self, calib_embeddings=None, calib_landmarks=None, calib_img_dims=None):
         """
         Get raw calibration cosine similarities, using cache if available.
  
         Args:
             calib_embeddings: List of N tensors, each (K_j, D).
             calib_landmarks: List of N [x, y] coordinates.
-            calib_xy_maps: List of N dicts mapping (x, y) -> index.
  
         Returns:
             Dict with "cosines" (list of N arrays) and "gt_indices" (list of N ints).
@@ -155,7 +136,7 @@ class Pipeline:
  
         logger.info("Computing calibration cosines")
         cosines = self.score_gen.compute_calib_cosines(
-            calib_embeddings, calib_landmarks, calib_xy_maps
+            calib_embeddings, calib_landmarks, calib_img_dims
         )
  
         if self.cache:
@@ -211,8 +192,3 @@ class Pipeline:
         )
 
     # TODO : Add support for reverse scores too for fullcaos
-
-    @staticmethod
-    def get_test_labels(test_landmarks, test_xy_maps):
-        """Get ground-truth label indices for test images. Returns (M,) array."""
-        return np.array(get_landmark_indices(test_landmarks, test_xy_maps))

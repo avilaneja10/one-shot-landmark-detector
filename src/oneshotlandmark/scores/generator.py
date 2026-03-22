@@ -28,18 +28,16 @@ class ScoreGenerator:
         verbose (bool): If True, show progress bars and timing logs.
     """
 
-    def __init__(self, apply_softmax: bool = True, temperature: float = 1.0, device: str = "cuda", verbose: bool = True ):
+    def __init__(self, level: str = "patch", patch_size: int = 16, apply_softmax: bool = True, 
+                 temperature: float = 1.0, device: str = "cuda", verbose: bool = True ):
         self.apply_softmax = apply_softmax
         self.temperature = temperature
         self.device = device
         self.verbose = verbose
+        self.level = level
+        self.patch_size = patch_size
 
-    def compute_calib_cosines(
-        self,
-        embeddings: list[torch.Tensor],
-        landmarks: list[list[float]],
-        xy_maps: list[dict],
-    ) -> dict:
+    def compute_calib_cosines(self, embeddings: list[torch.Tensor], landmarks: list[list[float]], image_dims) -> dict:
         """
         Compute raw cosine similarities for calibration (leave-one-out).
  
@@ -51,7 +49,6 @@ class ScoreGenerator:
         Args:
             embeddings: List of N tensors, each (K_j, D).
             landmarks: List of N [x, y] ground-truth coordinates.
-            xy_maps: List of N dicts mapping (x, y) -> index.
  
         Returns:
             Dict with:
@@ -63,8 +60,8 @@ class ScoreGenerator:
         start = time.perf_counter()
         N = len(embeddings)
  
-        gt_indices = get_landmark_indices(landmarks, xy_maps)
-        lm_embeddings = extract_landmark_embeddings(landmarks, embeddings, xy_maps)
+        gt_indices = get_landmark_indices(landmarks, image_dims, self.level, self.patch_size)
+        lm_embeddings = extract_landmark_embeddings(landmarks, embeddings, image_dims, self.level, self.patch_size)
  
         Q_gpu = torch.stack(lm_embeddings, dim=0).to(self.device)  # (N, D)
  
@@ -261,7 +258,7 @@ class ScoreGenerator:
         self,
         embeddings: list[torch.Tensor],
         landmarks: list[list[float]],
-        xy_maps: list[dict],
+        image_dims: list[tuple[int, int]],
         temperature: float = 1.0,
         apply_softmax: bool = True,
         return_all_scores: bool = False,
@@ -274,7 +271,6 @@ class ScoreGenerator:
         Args:
             embeddings: List of N tensors, each (K_j, D).
             landmarks: List of N [x, y] coordinates.
-            xy_maps: List of N dicts mapping (x, y) -> index.
             temperature: Softmax temperature.
             apply_softmax: Whether to apply softmax normalization.
             return_all_scores: If True, also return (N, N, K_max) matrix.
@@ -283,7 +279,7 @@ class ScoreGenerator:
             calib_true_matrix: (N, N) with diagonal = inf.
             calib_all_matrix (if return_all_scores): (N, N, K_max).
         """
-        cosines = self.compute_calib_cosines(embeddings, landmarks, xy_maps)
+        cosines = self.compute_calib_cosines(embeddings, landmarks, image_dims)
         return self.apply_calib_scoring(
             cosines, temperature=temperature,
             apply_softmax=apply_softmax,

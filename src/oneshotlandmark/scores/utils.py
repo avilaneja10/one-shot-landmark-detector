@@ -12,47 +12,27 @@ This module provides helpers used by the ScoreGenerator class for:
 import torch
 import numpy as np
 import logging
+from oneshotlandmark.utils import xy_to_index
 
 logger = logging.getLogger(__name__)
 
 
-def get_landmark_indices(landmarks: list[list[float]], xy_maps: list[dict]) -> list[int]:
-    """
-    Look up the flat embedding index for each landmark coordinate.
-
-    Args:
-        landmarks: List of [x, y] coordinates, one per image.
-        xy_maps: List of dicts mapping (x, y) -> flat index, one per image.
-
-    Returns:
-        List of integer indices into each image's (K, D) embedding tensor.
-    """
+def get_landmark_indices(landmarks, image_dims, level, patch_size=16):
+    """Given the landmark in [(x,y)...] coordinate get's the flat index [a,b..]"""
     indices = []
-    for lm, xy_map in zip(landmarks, xy_maps):
+    for lm, (w, h) in zip(landmarks, image_dims):
         x, y = int(lm[0]), int(lm[1])
-        indices.append(xy_map[(x, y)])
+        indices.append(xy_to_index(x, y, w, h, level, patch_size))
     return indices
 
 
-def extract_landmark_embeddings(landmarks: list[list[float]], embeddings: list[torch.Tensor], xy_maps: list[dict]) -> list[torch.Tensor]:
-    """
-    Extract the landmark embedding vector from each image's full embedding tensor.
-
-    Each returned tensor is a clone to ensure it remains valid even if the
-    full embedding tensors are later freed.
-
-    Args:
-        landmarks: List of [x, y] coordinates, one per image.
-        embeddings: List of (K_i, D) tensors, one per image.
-        xy_maps: List of dicts mapping (x, y) -> flat index, one per image.
-
-    Returns:
-        List of (D,) tensors, one landmark embedding per image.
-    """
+def extract_landmark_embeddings(landmarks, embeddings, image_dims, level, patch_size=16):
+    """Given landmarks in [(x,y}..] and corresponding embeddings returns the embeddings
+    corresponding to the landmark using flat index"""
     lm_embeddings = []
-    for lm, emb, xy_map in zip(landmarks, embeddings, xy_maps):
+    for lm, emb, (w, h) in zip(landmarks, embeddings, image_dims):
         x, y = int(lm[0]), int(lm[1])
-        idx = xy_map[(x, y)]
+        idx = xy_to_index(x, y, w, h, level, patch_size)
         lm_embeddings.append(emb[idx].clone())
     return lm_embeddings
 

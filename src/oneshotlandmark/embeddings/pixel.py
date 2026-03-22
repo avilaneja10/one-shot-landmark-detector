@@ -72,7 +72,7 @@ class PixelEmbeddingGenerator(BaseEmbeddingGenerator):
  
         return padded_images
     
-    def generate_embedding(self, img_path: str) -> tuple[torch.Tensor, dict]:
+    def generate_embedding(self, img_path: str) -> torch.Tensor:
         """
         Generate pixel-level embeddings for a single image.
  
@@ -89,8 +89,6 @@ class PixelEmbeddingGenerator(BaseEmbeddingGenerator):
         Returns:
             embeddings: (K, D) tensor of normalized pixel embeddings where
                 K = orig_width * orig_height, indexed in sorted (x, y) order.
-            xy_to_index: Dict mapping each pixel (x, y) in the original image
-                to its index in the embeddings tensor.
         """
         start = time.perf_counter()
         pil_image = load_image(img_path)
@@ -144,7 +142,6 @@ class PixelEmbeddingGenerator(BaseEmbeddingGenerator):
         D = grid_embeddings[0].shape[2]
         K = orig_w * orig_h
         embeddings = torch.zeros(K, D)
-        xy_to_index = {}
  
         ps = self.patch_size
         center_offset = ps // 2
@@ -166,10 +163,9 @@ class PixelEmbeddingGenerator(BaseEmbeddingGenerator):
  
                     flat_idx = orig_x * orig_h + orig_y
                     embeddings[flat_idx] = grid_emb[row, col]
-                    xy_to_index[(orig_x, orig_y)] = flat_idx
  
         logger.debug(
-            f"Pixel mapping: {len(xy_to_index)} pixels, "
+            f"Pixel mapping: {embeddings.shape[0]} pixels, "
             f"{time.perf_counter() - t_map:.3f}s"
         )
  
@@ -180,4 +176,4 @@ class PixelEmbeddingGenerator(BaseEmbeddingGenerator):
         )
  
         del padded_images, all_hidden, grid_embeddings
-        return embeddings, xy_to_index
+        return embeddings
