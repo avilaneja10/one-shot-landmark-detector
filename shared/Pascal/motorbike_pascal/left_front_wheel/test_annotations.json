@@ -1,0 +1,686 @@
+[
+  {
+    "img_path": "motorbike_pascal/2011_002495.jpg",
+    "landmarks": [
+      [
+        18.48892988929885,
+        294.0885608856089
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_000184.jpg",
+    "landmarks": [
+      [
+        417.01291512915134,
+        242.42804428044283
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_005000.jpg",
+    "landmarks": [
+      [
+        70.14944649446494,
+        239.87822878228792
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_000433.jpg",
+    "landmarks": [
+      [
+        171.6254612546126,
+        237.95571955719566
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_001177.jpg",
+    "landmarks": [
+      [
+        233.43357933579333,
+        253.7158671586717
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_001135.jpg",
+    "landmarks": [
+      [
+        384.8825665859564,
+        217.0556900726392
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_005684.jpg",
+    "landmarks": [
+      [
+        409.6328413284133,
+        261.1033210332105
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_008416.jpg",
+    "landmarks": [
+      [
+        326.60701107011073,
+        241.50553505535058
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_003846.jpg",
+    "landmarks": [
+      [
+        419.7804428044281,
+        247.96309963099634
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_003012.jpg",
+    "landmarks": [
+      [
+        352.43726937269366,
+        216.81549815498164
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_005731.jpg",
+    "landmarks": [
+      [
+        409.6328413284133,
+        253.79335793357927
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_002746.jpg",
+    "landmarks": [
+      [
+        241.95520581113794,
+        355.8268765133171
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_003802.jpg",
+    "landmarks": [
+      [
+        318.3044280442805,
+        153.86715867158674
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_001973.jpg",
+    "landmarks": [
+      [
+        321.23365617433404,
+        315.2917675544793
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_004365.jpg",
+    "landmarks": [
+      [
+        51.382566585956454,
+        396.98910411622296
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_000203.jpg",
+    "landmarks": [
+      [
+        369.1440677966102,
+        229.55569007263932
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_003269.jpg",
+    "landmarks": [
+      [
+        435.4630996309962,
+        204.6531365313653
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_004838.jpg",
+    "landmarks": [
+      [
+        274.9464944649447,
+        330.9889298892989
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_006857.jpg",
+    "landmarks": [
+      [
+        251.14043583535107,
+        164.54358353510918
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2011_002062.jpg",
+    "landmarks": [
+      [
+        424.39298892988927,
+        237.68819188191884
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_005603.jpg",
+    "landmarks": [
+      [
+        373.9501845018449,
+        181.9446494464944
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_006944.jpg",
+    "landmarks": [
+      [
+        364.42988929889304,
+        269.18081180811816
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_004043.jpg",
+    "landmarks": [
+      [
+        409.6328413284133,
+        247.25830258302597
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_008227.jpg",
+    "landmarks": [
+      [
+        343.2121771217712,
+        168.73800738007378
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_008141.jpg",
+    "landmarks": [
+      [
+        469.3653136531365,
+        210.35793357933593
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_002948.jpg",
+    "landmarks": [
+      [
+        441.92066420664213,
+        336.52398523985244
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_000144.jpg",
+    "landmarks": [
+      [
+        335.7106537530266,
+        171.32324455205816
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_002972.jpg",
+    "landmarks": [
+      [
+        354.2822878228783,
+        203.68265682656826
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_002172.jpg",
+    "landmarks": [
+      [
+        460.3708487084871,
+        237.6107011070111
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_004568.jpg",
+    "landmarks": [
+      [
+        405.94280442804427,
+        248.9335793357933
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_007488.jpg",
+    "landmarks": [
+      [
+        209.21771217712174,
+        284.8634686346863
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_003736.jpg",
+    "landmarks": [
+      [
+        423.4704797047971,
+        191.690036900369
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_007090.jpg",
+    "landmarks": [
+      [
+        140.260147601476,
+        222.35055350553517
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2011_001123.jpg",
+    "landmarks": [
+      [
+        396.6864406779661,
+        273.3510895883777
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2011_002413.jpg",
+    "landmarks": [
+      [
+        173.5532687651331,
+        413.9382566585956
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_005297.jpg",
+    "landmarks": [
+      [
+        417.9354243542436,
+        186.15498154981552
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_002047.jpg",
+    "landmarks": [
+      [
+        119.96494464944645,
+        221.21033210332106
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_000929.jpg",
+    "landmarks": [
+      [
+        147.82687651331716,
+        300.1368038740919
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_003827.jpg",
+    "landmarks": [
+      [
+        414.24538745387457,
+        250.7306273062731
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_008018.jpg",
+    "landmarks": [
+      [
+        380.1125461254613,
+        290.3985239852399
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_002926.jpg",
+    "landmarks": [
+      [
+        403.0423728813559,
+        249.74334140435832
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_004355.jpg",
+    "landmarks": [
+      [
+        373.9866828087167,
+        276.98305084745766
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_005172.jpg",
+    "landmarks": [
+      [
+        49.854243542435434,
+        190.90036900369
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_007241.jpg",
+    "landmarks": [
+      [
+        300.77675276752774,
+        292.2435424354244
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_006776.jpg",
+    "landmarks": [
+      [
+        397.640221402214,
+        321.05904059040597
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_000981.jpg",
+    "landmarks": [
+      [
+        417.9354243542436,
+        253.49815498154987
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_000897.jpg",
+    "landmarks": [
+      [
+        265.1113801452784,
+        345.22033898305096
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_007054.jpg",
+    "landmarks": [
+      [
+        177.29055690072641,
+        344.93099273607766
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2011_002476.jpg",
+    "landmarks": [
+      [
+        302.62177121771225,
+        223.97785977859778
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_000927.jpg",
+    "landmarks": [
+      [
+        438.23062730627305,
+        217.7029520295202
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_007485.jpg",
+    "landmarks": [
+      [
+        287.8616236162361,
+        236.1881918819189
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_003207.jpg",
+    "landmarks": [
+      [
+        160.55535055350552,
+        297.7785977859779
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_003334.jpg",
+    "landmarks": [
+      [
+        200.8690036900369,
+        219.87269372693726
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_001251.jpg",
+    "landmarks": [
+      [
+        398.56273062730634,
+        267.33579335793365
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_008148.jpg",
+    "landmarks": [
+      [
+        185.92372881355925,
+        294.3220338983051
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_000515.jpg",
+    "landmarks": [
+      [
+        222.50363196125915,
+        445.4152542372882
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_000074.jpg",
+    "landmarks": [
+      [
+        360.7398523985239,
+        242.64575645756463
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_004987.jpg",
+    "landmarks": [
+      [
+        322.9169741697417,
+        252.7933579335794
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_002128.jpg",
+    "landmarks": [
+      [
+        345.97970479704804,
+        321.76383763837646
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_008497.jpg",
+    "landmarks": [
+      [
+        342.289667896679,
+        280.2509225092251
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_005494.jpg",
+    "landmarks": [
+      [
+        270.3339483394834,
+        168.84501845018463
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_005893.jpg",
+    "landmarks": [
+      [
+        439.15313653136525,
+        213.12546125461262
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_003820.jpg",
+    "landmarks": [
+      [
+        353.359778597786,
+        278.5608856088561
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_004066.jpg",
+    "landmarks": [
+      [
+        290.629151291513,
+        251.65313653136536
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_004345.jpg",
+    "landmarks": [
+      [
+        290.6291512915129,
+        288.05350553505536
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_007428.jpg",
+    "landmarks": [
+      [
+        297.77859778597787,
+        297.8939114391144
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2011_000060.jpg",
+    "landmarks": [
+      [
+        296.16420664206646,
+        274.7158671586716
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2010_000678.jpg",
+    "landmarks": [
+      [
+        92.96368038740921,
+        341.2990314769976
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_001827.jpg",
+    "landmarks": [
+      [
+        252.80627306273058,
+        205.74538745387463
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_004611.jpg",
+    "landmarks": [
+      [
+        422.5479704797049,
+        204.60516605166052
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_005155.jpg",
+    "landmarks": [
+      [
+        418.5387409200969,
+        293.4782082324456
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_003020.jpg",
+    "landmarks": [
+      [
+        392.79704797047975,
+        230.43542435424357
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2011_001022.jpg",
+    "landmarks": [
+      [
+        344.1346863468634,
+        110.7269372693728
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2008_007558.jpg",
+    "landmarks": [
+      [
+        364.42988929889304,
+        124.34686346863467
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_002335.jpg",
+    "landmarks": [
+      [
+        263.24697336561746,
+        363.0907990314771
+      ]
+    ]
+  },
+  {
+    "img_path": "motorbike_pascal/2009_004801.jpg",
+    "landmarks": [
+      [
+        336.9852398523986,
+        206.24538745387449
+      ]
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "category": "aeroplane",
+  "landmark_names": [
+    "left_elevator",
+    "left_wing",
+    "noselanding",
+    "rudder_upper"
+  ],
+  "n_train": 100,
+  "n_test": 100,
+  "n_available": 206,
+  "seed": 42
+}

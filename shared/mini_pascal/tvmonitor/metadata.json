@@ -1,0 +1,13 @@
+{
+  "category": "tvmonitor",
+  "landmark_names": [
+    "front_bottom_left",
+    "front_bottom_right",
+    "front_top_left",
+    "front_top_right"
+  ],
+  "n_train": 100,
+  "n_test": 100,
+  "n_available": 303,
+  "seed": 42
+}

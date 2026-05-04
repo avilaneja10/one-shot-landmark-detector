@@ -1,0 +1,15 @@
+{
+  "category": "bottle",
+  "landmark_names": [
+    "body",
+    "body_left",
+    "body_right",
+    "bottom",
+    "bottom_left",
+    "bottom_right"
+  ],
+  "n_train": 100,
+  "n_test": 100,
+  "n_available": 204,
+  "seed": 42
+}

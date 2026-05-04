@@ -1,0 +1,902 @@
+[
+  {
+    "img_path": "diningtable_pascal/2009_002688.jpg",
+    "landmarks": [
+      [
+        458.3561797752809,
+        256.9404494382023
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_001221.jpg",
+    "landmarks": [
+      [
+        414.48305084745755,
+        435.7905569007264
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_008470.jpg",
+    "landmarks": [
+      [
+        235.33146067415728,
+        180.4157303370787
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_004992.jpg",
+    "landmarks": [
+      [
+        262.1573033707865,
+        93.19662921348277
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_001862.jpg",
+    "landmarks": [
+      [
+        295.93357933579335,
+        204.60516605166058
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_002241.jpg",
+    "landmarks": [
+      [
+        329.71348314606746,
+        145.0224719101124
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_002163.jpg",
+    "landmarks": [
+      [
+        467.857910906298,
+        81.74654377880182
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_006969.jpg",
+    "landmarks": [
+      [
+        483.21889400921657,
+        274.5268817204301
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_003545.jpg",
+    "landmarks": [
+      [
+        429.99438202247194,
+        189.685393258427
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_001846.jpg",
+    "landmarks": [
+      [
+        167.01291512915128,
+        193.5350553505535
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_003154.jpg",
+    "landmarks": [
+      [
+        397.9719101123596,
+        344.74157303370794
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_005884.jpg",
+    "landmarks": [
+      [
+        2.7471910112359272,
+        203.16853932584272
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_006008.jpg",
+    "landmarks": [
+      [
+        276.76404494382024,
+        324.65730337078617
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_004564.jpg",
+    "landmarks": [
+      [
+        482.5110701107011,
+        212.20295202952042
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_001095.jpg",
+    "landmarks": [
+      [
+        144.17977528089887,
+        172.97191011235918
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_000835.jpg",
+    "landmarks": [
+      [
+        244.60112359550564,
+        149.2359550561798
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_001785.jpg",
+    "landmarks": [
+      [
+        435.8932584269663,
+        348.1123595505619
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_003157.jpg",
+    "landmarks": [
+      [
+        330.69662921348316,
+        237.0168539325839
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_000188.jpg",
+    "landmarks": [
+      [
+        361.03370786516854,
+        315.6685393258424
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_003150.jpg",
+    "landmarks": [
+      [
+        354.95468509984636,
+        192.88172043010763
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_000782.jpg",
+    "landmarks": [
+      [
+        447.6910112359551,
+        269.74157303370794
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_000212.jpg",
+    "landmarks": [
+      [
+        289.997578692494,
+        246.26271186440664
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_001900.jpg",
+    "landmarks": [
+      [
+        373.91767554479424,
+        124.94188861985464
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_002200.jpg",
+    "landmarks": [
+      [
+        472.97191011235964,
+        305.13483146067426
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_000361.jpg",
+    "landmarks": [
+      [
+        320.149446494465,
+        255.34317343173439
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_000573.jpg",
+    "landmarks": [
+      [
+        86.75461254612546,
+        239.87822878228792
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_002394.jpg",
+    "landmarks": [
+      [
+        370.1629213483146,
+        344.74157303370794
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_001871.jpg",
+    "landmarks": [
+      [
+        299.8542435424355,
+        84.67896678966787
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_002422.jpg",
+    "landmarks": [
+      [
+        412.4003690036901,
+        244.27306273062734
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_001208.jpg",
+    "landmarks": [
+      [
+        383.6460674157304,
+        196.4269662921349
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_001083.jpg",
+    "landmarks": [
+      [
+        179.8394777265745,
+        170.8402457757296
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_005001.jpg",
+    "landmarks": [
+      [
+        91.23033707865167,
+        231.82022471910116
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_000811.jpg",
+    "landmarks": [
+      [
+        397.1292134831461,
+        225.07865168539328
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_002044.jpg",
+    "landmarks": [
+      [
+        313.7022471910113,
+        101.20224719101122
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_002481.jpg",
+    "landmarks": [
+      [
+        430.61992619926195,
+        320.4566420664206
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_005081.jpg",
+    "landmarks": [
+      [
+        270.6123595505618,
+        84.43258426966284
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_000621.jpg",
+    "landmarks": [
+      [
+        262.5363196125908,
+        444.2046004842614
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_001975.jpg",
+    "landmarks": [
+      [
+        338.14044943820227,
+        171.98876404494385
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_005936.jpg",
+    "landmarks": [
+      [
+        410.5553505535056,
+        298.7011070110701
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_000337.jpg",
+    "landmarks": [
+      [
+        327.185393258427,
+        235.19101123595507
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_001670.jpg",
+    "landmarks": [
+      [
+        256.49630996309963,
+        106.81918819188189
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_001413.jpg",
+    "landmarks": [
+      [
+        342.289667896679,
+        149.25461254612546
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_003904.jpg",
+    "landmarks": [
+      [
+        367.7752808988765,
+        330.2752808988761
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_006192.jpg",
+    "landmarks": [
+      [
+        121.56741573033707,
+        32.10112359550561
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_004769.jpg",
+    "landmarks": [
+      [
+        330.69662921348316,
+        325.7808988764042
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_002443.jpg",
+    "landmarks": [
+      [
+        322.69662058371733,
+        84.0506912442396
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_004707.jpg",
+    "landmarks": [
+      [
+        71.99446494464941,
+        217.52029520295204
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_003263.jpg",
+    "landmarks": [
+      [
+        148.39887640449442,
+        421.28651685393254
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_000837.jpg",
+    "landmarks": [
+      [
+        385.6476014760148,
+        47.77859778597781
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_001754.jpg",
+    "landmarks": [
+      [
+        383.6460674157304,
+        270.58426966292143
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_002108.jpg",
+    "landmarks": [
+      [
+        196.0719557195572,
+        202.97785977859803
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_007048.jpg",
+    "landmarks": [
+      [
+        121.11138014527853,
+        271.6864406779661
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_004177.jpg",
+    "landmarks": [
+      [
+        499.93820224719104,
+        280.6966292134832
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_002032.jpg",
+    "landmarks": [
+      [
+        297.0867158671587,
+        201.83763837638375
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_002639.jpg",
+    "landmarks": [
+      [
+        435.46309963099634,
+        247.96309963099634
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_003183.jpg",
+    "landmarks": [
+      [
+        371.8483146067416,
+        209.0674157303371
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_002994.jpg",
+    "landmarks": [
+      [
+        334.21771217712177,
+        207.5904059040592
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_007438.jpg",
+    "landmarks": [
+      [
+        316.459409594096,
+        233.20295202952028
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_004948.jpg",
+    "landmarks": [
+      [
+        183.92696629213484,
+        226.76404494382027
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_002743.jpg",
+    "landmarks": [
+      [
+        344.03932584269666,
+        278.16853932584274
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_003520.jpg",
+    "landmarks": [
+      [
+        222.50363196125915,
+        398.1997578692494
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_006952.jpg",
+    "landmarks": [
+      [
+        274.09550561797755,
+        182.94382022471913
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_003888.jpg",
+    "landmarks": [
+      [
+        369.32022471910113,
+        241.93258426966295
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_004661.jpg",
+    "landmarks": [
+      [
+        129.14823348694316,
+        187.73732718894007
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_002078.jpg",
+    "landmarks": [
+      [
+        172.41283292978204,
+        105.37288135593218
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_003520.jpg",
+    "landmarks": [
+      [
+        358.79493087557603,
+        212.3149001536098
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_000227.jpg",
+    "landmarks": [
+      [
+        76.06179775280899,
+        94.4606741573034
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_002613.jpg",
+    "landmarks": [
+      [
+        438.347191011236,
+        108.77303370786518
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_002927.jpg",
+    "landmarks": [
+      [
+        349.9078651685394,
+        282.4898876404494
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_000655.jpg",
+    "landmarks": [
+      [
+        198.1123595505618,
+        215.6685393258424
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_004140.jpg",
+    "landmarks": [
+      [
+        409.63284132841335,
+        261.8007380073801
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_005150.jpg",
+    "landmarks": [
+      [
+        140.9494382022472,
+        221.70786516853937
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_004278.jpg",
+    "landmarks": [
+      [
+        420.70295202952036,
+        61.03874538745373
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_006056.jpg",
+    "landmarks": [
+      [
+        300.77675276752774,
+        265.49077490774914
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_008365.jpg",
+    "landmarks": [
+      [
+        335.8321033210333,
+        331.9114391143912
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_003966.jpg",
+    "landmarks": [
+      [
+        140.1067415730337,
+        69.17977528089887
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_001215.jpg",
+    "landmarks": [
+      [
+        488.14044943820227,
+        264.68539325842704
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_006705.jpg",
+    "landmarks": [
+      [
+        239.54494382022474,
+        170.30337078651692
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_002952.jpg",
+    "landmarks": [
+      [
+        99.65730337078651,
+        276.48314606741576
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_000043.jpg",
+    "landmarks": [
+      [
+        417.93542435424354,
+        195.8025830258302
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_002864.jpg",
+    "landmarks": [
+      [
+        122.41011235955054,
+        202.32584269662928
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_000174.jpg",
+    "landmarks": [
+      [
+        330.29704797047975,
+        308.8487084870849
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_004321.jpg",
+    "landmarks": [
+      [
+        403.34178187403995,
+        331.3625192012288
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_006250.jpg",
+    "landmarks": [
+      [
+        409.76966292134836,
+        182.94382022471913
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_002328.jpg",
+    "landmarks": [
+      [
+        465.5537634408602,
+        63.31336405529953
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_000427.jpg",
+    "landmarks": [
+      [
+        413.3228782287823,
+        325.4538745387455
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_004229.jpg",
+    "landmarks": [
+      [
+        306.9606741573034,
+        183.78651685393262
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_000760.jpg",
+    "landmarks": [
+      [
+        348.74723247232475,
+        202.760147601476
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2011_001106.jpg",
+    "landmarks": [
+      [
+        202.60674157303367,
+        214.54494382022438
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_002088.jpg",
+    "landmarks": [
+      [
+        219.3202247191011,
+        189.685393258427
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_001682.jpg",
+    "landmarks": [
+      [
+        237.01685393258427,
+        350.6404494382024
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2009_002844.jpg",
+    "landmarks": [
+      [
+        290.8415730337079,
+        144.63707865168533
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_000817.jpg",
+    "landmarks": [
+      [
+        301.95929339477726,
+        172.37634408602145
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_004793.jpg",
+    "landmarks": [
+      [
+        445.61070110701115,
+        310.6937269372694
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_002508.jpg",
+    "landmarks": [
+      [
+        308.8717357910906,
+        163.15975422427033
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_007617.jpg",
+    "landmarks": [
+      [
+        494.0393258426967,
+        318.61797752809
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_005570.jpg",
+    "landmarks": [
+      [
+        469.60112359550567,
+        373.3932584269663
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2008_004849.jpg",
+    "landmarks": [
+      [
+        387.21274961597544,
+        329.05837173579107
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_004597.jpg",
+    "landmarks": [
+      [
+        474.6573033707865,
+        220.86516853932588
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_pascal/2010_001271.jpg",
+    "landmarks": [
+      [
+        370.1955719557195,
+        221.6715867158671
+      ]
+    ]
+  }
+]

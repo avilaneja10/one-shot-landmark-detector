@@ -1,0 +1,47 @@
+{
+  "aeroplane": {
+    "landmarks": [
+      "left_elevator",
+      "left_wing",
+      "noselanding",
+      "rudder_upper"
+    ],
+    "available": 206,
+    "train": 100,
+    "test": 100
+  },
+  "bottle": {
+    "landmarks": [
+      "body",
+      "body_left",
+      "body_right",
+      "bottom",
+      "bottom_left",
+      "bottom_right"
+    ],
+    "available": 204,
+    "train": 100,
+    "test": 100
+  },
+  "chair": {
+    "landmarks": [
+      "back_upper_left",
+      "back_upper_right",
+      "seat_lower_right"
+    ],
+    "available": 201,
+    "train": 100,
+    "test": 100
+  },
+  "tvmonitor": {
+    "landmarks": [
+      "front_bottom_left",
+      "front_bottom_right",
+      "front_top_left",
+      "front_top_right"
+    ],
+    "available": 303,
+    "train": 100,
+    "test": 100
+  }
+}
