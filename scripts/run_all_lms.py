@@ -44,23 +44,25 @@ from oneshotlandmark.embeddings.pixel import PixelEmbeddingGenerator
 from oneshotlandmark.embeddings.bilinear_interpolation import BilinearEmbeddingGenerator
 from oneshotlandmark.scores.generator import ScoreGenerator
 from oneshotlandmark.scores.utils import (
-    estimate_memory_gb,
     extract_landmark_embeddings,
     get_landmark_indices,
     remove_self_2d,
-    remove_self_3d,
-    scores_to_matrix,
 )
-from cp4icl.oneshot import caos, scos
-from cp4icl.model_selection import yk_baseline, yk_adjust, yk_split, modsel_cp, modsel_cp_ub
+from oneshotlandmark.gpu_pixel_cp import (
+    caos_ragged,
+    scos_ragged,
+    yk_baseline_ragged,
+    yk_adjust_ragged,
+    yk_split_ragged,
+    modsel_cp_ub_ragged,
+)
 
 logger = logging.getLogger(__name__)
 
 ONESHOT_METHODS = {"caos", "scos", "fullcaos"}
-MODSEL_METHODS  = {"yk_baseline", "yk_adjust", "yk_split", "modsel_cp", "modsel_cp_ub"}
+MODSEL_METHODS  = {"yk_baseline", "yk_adjust", "yk_split", "modsel_cp_ub"}
 ALL_METHODS     = ONESHOT_METHODS | MODSEL_METHODS
 
-# CSV columns written per (landmark × method) row.
 _CSV_FIELDS = [
     "landmark_idx", "landmark_name",
     "level", "alpha", "temperature", "patch_size", "apply_softmax", "normalize", "k",
@@ -87,19 +89,12 @@ def _parse_methods(methods_arg: list[str] | None) -> set[str]:
 
 
 def _build_emb_gen(model, level: str, patch_size: int, normalize: bool, verbose: bool):
-    """Factory: return the right embedding generator for the requested level."""
     if level == "patch":
-        return PatchEmbeddingGenerator(
-            model=model, patch_size=patch_size, normalize=normalize, verbose=verbose
-        )
+        return PatchEmbeddingGenerator(model=model, patch_size=patch_size, normalize=normalize, verbose=verbose)
     if level == "pixel":
-        return PixelEmbeddingGenerator(
-            model=model, patch_size=patch_size, normalize=normalize, verbose=verbose
-        )
+        return PixelEmbeddingGenerator(model=model, patch_size=patch_size, normalize=normalize, verbose=verbose)
     if level == "bilinear":
-        return BilinearEmbeddingGenerator(
-            model=model, patch_size=patch_size, normalize=normalize, verbose=verbose
-        )
+        return BilinearEmbeddingGenerator(model=model, patch_size=patch_size, normalize=normalize, verbose=verbose)
     raise ValueError(f"Unknown level '{level}'. Must be 'patch', 'pixel', or 'bilinear'.")
 
 
@@ -133,6 +128,7 @@ def run_single_landmark(
     alpha: float,
     k: int,
     methods: set[str],
+    device: str = "cuda",
 ) -> dict:
     """
     Run all requested CP methods for a single landmark.
@@ -140,19 +136,6 @@ def run_single_landmark(
     Image embeddings are passed in pre-computed and are NOT modified.  All
     temporary tensors (score matrices, etc.) are allocated here and freed
     before the function returns.
-
-    Args:
-        lm_idx:        Landmark index (used only for log messages).
-        calib_lms:     [x, y] ground-truth coords for each calibration image.
-        test_lms:      [x, y] ground-truth coords for each test image.
-        calib_embs:    Pre-computed (K_i, D) tensors, one per calibration image.
-        calib_xy_maps: Pre-computed (x,y)->idx dicts, one per calibration image.
-        test_embs:     Pre-computed (K_m, D) tensors, one per test image.
-        test_xy_maps:  Pre-computed (x,y)->idx dicts, one per test image.
-        score_gen:     Shared ScoreGenerator instance.
-        alpha:         Miscoverage level.
-        k:             Nearest sources for CAOS.
-        methods:       Set of CP method names to run.
 
     Returns:
         Dict with n_calib, n_test, coverage_<method>, avg_set_size_<method>,
@@ -170,166 +153,104 @@ def run_single_landmark(
     # ── Extract per-landmark calibration embeddings ──────────────────────────
     calib_lm_embs = extract_landmark_embeddings(calib_lms, calib_embs, calib_xy_maps)
 
-    # ── Calibration scores ───────────────────────────────────────────────────
-    logger.info(f"[lm {lm_idx}] Computing calibration scores (return_all={needs_calib_all})")
+    # ── Calibration scores (ragged) ──────────────────────────────────────────
+    logger.info(f"[lm {lm_idx}] Computing calibration scores (ragged={needs_calib_all})")
     if needs_calib_all:
-        K_max_calib = max(e.shape[0] for e in calib_embs)
-        mem_gb = estimate_memory_gb((N, N, K_max_calib))
-        logger.info(
-            f"[lm {lm_idx}] calib_all_matrix will be approx ({N}, {N}, {K_max_calib}) "
-            f"= {mem_gb:.1f} GB"
-        )
-        calib_true_matrix, calib_all_matrix = score_gen.generate_calib_scores(
-            calib_embs, calib_lms, calib_xy_maps, return_all_scores=True
+        calib_true_matrix, calib_all_list = score_gen.generate_calib_scores(
+            calib_embs, calib_lms, calib_xy_maps, return_ragged=True
         )
     else:
         calib_true_matrix = score_gen.generate_calib_scores(
-            calib_embs, calib_lms, calib_xy_maps, return_all_scores=False
+            calib_embs, calib_lms, calib_xy_maps
         )
-        calib_all_matrix = None
+        calib_all_list = None
 
-    # ── Eval scores ──────────────────────────────────────────────────────────
+    # ── Eval scores (already ragged — no padding needed) ─────────────────────
     logger.info(f"[lm {lm_idx}] Computing eval scores")
-    eval_scores_list   = score_gen.generate_eval_scores(test_embs, calib_lm_embs)
-    eval_scores_matrix = scores_to_matrix(eval_scores_list)   # (N, M, K_max)
-    K_eval             = eval_scores_matrix.shape[2]
-    del eval_scores_list
-    gc.collect()
+    eval_scores_list = score_gen.generate_eval_scores(test_embs, calib_lm_embs)
+    # eval_scores_list: list of M arrays, each (K_m, N)
 
     # ── Test labels ──────────────────────────────────────────────────────────
     test_labels = np.array(get_landmark_indices(test_lms, test_xy_maps))
 
-    # ── Self-removed calibration matrices ────────────────────────────────────
+    # ── Self-removed calibration true scores ─────────────────────────────────
     if needs_no_self:
-        calib_true_no_self = remove_self_2d(calib_true_matrix)       # (N, N-1)
-
-    if needs_calib_all:
-        # Harmonize K dimension between calib and eval matrices when image sizes differ.
-        K_calib = calib_all_matrix.shape[2]
-        if K_calib != K_eval:
-            K_unified = max(K_calib, K_eval)
-            logger.info(
-                f"[lm {lm_idx}] K mismatch — harmonizing: "
-                f"calib={K_calib}, eval={K_eval} → {K_unified}"
-            )
-            if K_calib < K_unified:
-                calib_all_matrix = np.pad(
-                    calib_all_matrix,
-                    ((0, 0), (0, 0), (0, K_unified - K_calib)),
-                    constant_values=1.1,
-                )
-            if K_eval < K_unified:
-                eval_scores_matrix = np.pad(
-                    eval_scores_matrix,
-                    ((0, 0), (0, 0), (0, K_unified - K_eval)),
-                    constant_values=1.1,
-                )
-
-        calib_all_no_self = remove_self_3d(calib_all_matrix)         # (N, N-1, K)
-        del calib_all_matrix
-        gc.collect()
+        calib_true_no_self = remove_self_2d(calib_true_matrix)  # (N, N-1)
 
     # ── CP methods ───────────────────────────────────────────────────────────
     results = {"n_calib": N, "n_test": M}
 
     if "caos" in methods:
-        r = caos(
-            alpha=alpha,
-            calib_scores=calib_true_matrix,
-            eval_scores=eval_scores_matrix,
-            y_eval=test_labels,
-            k=k_used,
+        r = caos_ragged(
+            alpha=alpha, calib_scores=calib_true_matrix,
+            eval_scores_list=eval_scores_list, y_eval=test_labels,
+            k=k_used, device=device,
         )
-        results["coverage_caos"]      = r.coverage
-        results["avg_set_size_caos"]  = r.avg_set_size
+        results["coverage_caos"]     = r.coverage
+        results["avg_set_size_caos"] = r.avg_set_size
         logger.info(f"[lm {lm_idx}] CAOS      coverage={r.coverage:.4f}  avg_set_size={r.avg_set_size:.2f}")
 
     if "scos" in methods:
-        r = scos(
-            alpha=alpha,
-            calib_scores=calib_true_no_self,
-            eval_scores=eval_scores_matrix,
-            y_eval=test_labels,
+        r = scos_ragged(
+            alpha=alpha, calib_true_no_self=calib_true_no_self,
+            eval_scores_list=eval_scores_list, y_eval=test_labels,
         )
-        results["coverage_scos"]      = r.coverage
-        results["avg_set_size_scos"]  = r.avg_set_size
+        results["coverage_scos"]     = r.coverage
+        results["avg_set_size_scos"] = r.avg_set_size
         logger.info(f"[lm {lm_idx}] SCOS      coverage={r.coverage:.4f}  avg_set_size={r.avg_set_size:.2f}")
 
     if "fullcaos" in methods:
-        # Reverse scores are not yet implemented; skip rather than crash.
         logger.warning(
             f"[lm {lm_idx}] fullcaos skipped — reverse score computation "
-            "is not yet implemented (see run.py Phase 4)."
+            "is not yet implemented."
         )
 
     if "yk_baseline" in methods:
-        r = yk_baseline(
-            alpha=alpha,
-            calib_true_scores=calib_true_no_self,
-            calib_all_scores=calib_all_no_self,
-            eval_scores=eval_scores_matrix,
-            y_eval=test_labels,
+        r = yk_baseline_ragged(
+            alpha=alpha, calib_true_no_self=calib_true_no_self,
+            calib_all_list=calib_all_list, eval_scores_list=eval_scores_list,
+            y_eval=test_labels, N_full=N, device=device,
         )
         results["coverage_yk_baseline"]     = r.coverage
         results["avg_set_size_yk_baseline"] = r.avg_set_size
         logger.info(f"[lm {lm_idx}] yk_baseline  coverage={r.coverage:.4f}  avg_set_size={r.avg_set_size:.2f}")
 
     if "yk_adjust" in methods:
-        r = yk_adjust(
-            alpha=alpha,
-            calib_true_scores=calib_true_no_self,
-            calib_all_scores=calib_all_no_self,
-            eval_scores=eval_scores_matrix,
-            y_eval=test_labels,
+        r = yk_adjust_ragged(
+            alpha=alpha, calib_true_no_self=calib_true_no_self,
+            calib_all_list=calib_all_list, eval_scores_list=eval_scores_list,
+            y_eval=test_labels, N_full=N, device=device,
         )
         results["coverage_yk_adjust"]     = r.coverage
         results["avg_set_size_yk_adjust"] = r.avg_set_size
         logger.info(f"[lm {lm_idx}] yk_adjust    coverage={r.coverage:.4f}  avg_set_size={r.avg_set_size:.2f}")
 
     if "yk_split" in methods:
-        r = yk_split(
-            alpha=alpha,
-            calib_true_scores=calib_true_no_self,
-            calib_all_scores=calib_all_no_self,
-            eval_scores=eval_scores_matrix,
-            y_eval=test_labels,
-            shuffle=True,
-            random_state=42,
+        r = yk_split_ragged(
+            alpha=alpha, calib_true_no_self=calib_true_no_self,
+            calib_all_list=calib_all_list, eval_scores_list=eval_scores_list,
+            y_eval=test_labels, N_full=N, device=device,
         )
         results["coverage_yk_split"]     = r.coverage
         results["avg_set_size_yk_split"] = r.avg_set_size
         logger.info(f"[lm {lm_idx}] yk_split     coverage={r.coverage:.4f}  avg_set_size={r.avg_set_size:.2f}")
 
-    if "modsel_cp" in methods:
-        r = modsel_cp(
-            alpha=alpha,
-            calib_true_scores=calib_true_no_self,
-            calib_all_scores=calib_all_no_self,
-            eval_scores=eval_scores_matrix,
-            y_eval=test_labels,
-        )
-        results["coverage_modsel_cp"]     = r.coverage
-        results["avg_set_size_modsel_cp"] = r.avg_set_size
-        logger.info(f"[lm {lm_idx}] modsel_cp    coverage={r.coverage:.4f}  avg_set_size={r.avg_set_size:.2f}")
-
     if "modsel_cp_ub" in methods:
-        r = modsel_cp_ub(
-            alpha=alpha,
-            calib_true_scores=calib_true_no_self,
-            calib_all_scores=calib_all_no_self,
-            eval_scores=eval_scores_matrix,
-            y_eval=test_labels,
+        r = modsel_cp_ub_ragged(
+            alpha=alpha, calib_true_no_self=calib_true_no_self,
+            calib_all_list=calib_all_list, eval_scores_list=eval_scores_list,
+            y_eval=test_labels, N_full=N, device=device,
         )
         results["coverage_modsel_cp_ub"]     = r.coverage
         results["avg_set_size_modsel_cp_ub"] = r.avg_set_size
         logger.info(f"[lm {lm_idx}] modsel_cp_ub coverage={r.coverage:.4f}  avg_set_size={r.avg_set_size:.2f}")
 
-    # ── Per-landmark cleanup ─────────────────────────────────────────────────
-    del calib_true_matrix, eval_scores_matrix
+    # ── Cleanup ──────────────────────────────────────────────────────────────
+    del calib_true_matrix, eval_scores_list
     if needs_no_self:
         del calib_true_no_self
-    if needs_calib_all:
-        del calib_all_no_self
+    if calib_all_list is not None:
+        del calib_all_list
     gc.collect()
     torch.cuda.empty_cache()
 
@@ -358,8 +279,8 @@ def main() -> None:
     parser.add_argument("--base_img_path", required=True,
                         help="Base directory prepended to image paths in JSON")
     parser.add_argument("--landmark_names_path", default=None,
-                        help="Optional JSON file with a list of landmark name strings. "
-                             "If omitted, landmarks are named landmark_0, landmark_1, …")
+                        help="Optional JSON file with landmark name strings. "
+                             "If omitted, names are landmark_0, landmark_1, …")
 
     # ── Embedding ────────────────────────────────────────────────────────────
     parser.add_argument("--level", choices=["patch", "pixel", "bilinear"], default="patch",
@@ -383,7 +304,7 @@ def main() -> None:
     parser.add_argument("--methods", nargs="+", default=None,
                         help='CP methods to run, or "all". '
                              'Choices: caos scos fullcaos yk_baseline yk_adjust '
-                             'yk_split modsel_cp modsel_cp_ub')
+                             'yk_split modsel_cp_ub')
 
     # ── Resume ───────────────────────────────────────────────────────────────
     parser.add_argument("--start_landmark", type=int, default=0,
@@ -399,7 +320,6 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    # ── Logging ──────────────────────────────────────────────────────────────
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(asctime)s | %(name)s | %(levelname)s | %(message)s",
@@ -457,10 +377,9 @@ def main() -> None:
     logger.info(f"Embedding generation done: {_format_eta(t_emb)}")
 
     # ── CSV setup ─────────────────────────────────────────────────────────────
-    # Append when resuming (start_landmark > 0); overwrite when starting fresh.
     if args.output_path:
         os.makedirs(os.path.dirname(args.output_path) or ".", exist_ok=True)
-        csv_mode    = "a" if args.start_landmark > 0 else "w"
+        csv_mode     = "a" if args.start_landmark > 0 else "w"
         write_header = csv_mode == "w"
         csv_file     = open(args.output_path, csv_mode, newline="")
         writer       = csv.DictWriter(csv_file, fieldnames=_CSV_FIELDS)
@@ -494,19 +413,18 @@ def main() -> None:
                 alpha=args.alpha,
                 k=args.k,
                 methods=methods,
+                device=args.device,
             )
 
             lm_time = lm_results["landmark_time_seconds"]
             landmark_times.append(lm_time)
 
-            # Per-landmark results summary
             for method in sorted(methods):
                 cov = lm_results.get(f"coverage_{method}")
                 sz  = lm_results.get(f"avg_set_size_{method}")
                 if cov is not None:
                     print(f"  {method:<16} coverage={cov:.4f}  avg_set_size={sz:.2f}")
 
-            # ETA
             avg_t     = sum(landmark_times) / len(landmark_times)
             remaining = n_landmarks - lm_idx - 1
             print(
@@ -515,7 +433,6 @@ def main() -> None:
                 f"ETA: {_format_eta(remaining * avg_t)}"
             )
 
-            # Write CSV rows (one per method) and flush immediately
             if writer:
                 base = {
                     "landmark_idx":          lm_idx,
@@ -560,9 +477,9 @@ def main() -> None:
     if csv_file:
         csv_file.close()
 
-    total_time     = time.perf_counter() - t_total_start
-    n_succeeded    = len(landmark_times)
-    n_ran          = n_landmarks - args.start_landmark
+    total_time  = time.perf_counter() - t_total_start
+    n_succeeded = len(landmark_times)
+    n_ran       = n_landmarks - args.start_landmark
 
     print(f"\n{'='*60}")
     print(f"  DONE")
