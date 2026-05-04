@@ -1,6 +1,7 @@
 from oneshotlandmark.model import ViTModel
 from oneshotlandmark.embeddings.patch import PatchEmbeddingGenerator
 from oneshotlandmark.embeddings.pixel import PixelEmbeddingGenerator
+from oneshotlandmark.embeddings.bilinear_interpolation import BilinearEmbeddingGenerator
 from oneshotlandmark.scores.generator import ScoreGenerator
 from oneshotlandmark.scores.utils import extract_landmark_embeddings, scores_to_matrix, get_landmark_indices, remove_self_2d
 from cp4icl.oneshot import caos, scos, fullcaos
@@ -107,8 +108,12 @@ def run(calib_img_paths, test_img_paths, calib_lms, test_lms, level="patch",
         emb_gen = PixelEmbeddingGenerator(
             model=model, patch_size=patch_size, normalize=normalize
         )
+    elif level == "bilinear":
+        emb_gen = BilinearEmbeddingGenerator(
+            model=model, patch_size=patch_size, normalize=normalize
+        )
     else:
-        raise ValueError(f"Unknown level: {level}. Must be 'patch' or 'pixel'.")
+        raise ValueError(f"Unknown level: {level}. Must be 'patch', 'pixel', or 'bilinear'.")
     
     score_gen = ScoreGenerator(
         apply_softmax=apply_softmax,
@@ -327,7 +332,7 @@ def main():
                         help="Index of the landmark to evaluate")
  
     # Embedding level
-    parser.add_argument("--level", choices=["patch", "pixel"], default="patch",
+    parser.add_argument("--level", choices=["patch", "pixel", "bilinear"], default="patch",
                         help="Embedding granularity")
  
     # Score computation
