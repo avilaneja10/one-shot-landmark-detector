@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 run_all_lms.py — Run the conformal landmark detection pipeline over ALL
 landmarks in a dataset, reusing image embeddings across landmarks.

@@ -1,3 +1,4 @@
+from __future__ import annotations
 from oneshotlandmark.embeddings.base import BaseEmbeddingGenerator
 import logging
 import time
