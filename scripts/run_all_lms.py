@@ -21,10 +21,14 @@ Resume after a crash
 Usage
 -----
     python scripts/run_all_lms.py \\
-        -c data/calib.json -t data/test.json \\
+        --dir data/my_dataset \\
         --base_img_path /data/images \\
         --level patch --alpha 0.1 --temperature 0.05 \\
         --methods caos scos -o results.csv
+
+The directory must contain train_annotations.json and test_annotations.json.
+If metadata.json is present, landmark_names are read from it; otherwise
+landmarks are named landmark_0, landmark_1, …
 """
 
 import argparse
@@ -34,6 +38,7 @@ import json
 import logging
 import os
 import time
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -272,15 +277,11 @@ def main() -> None:
     )
 
     # ── Data ─────────────────────────────────────────────────────────────────
-    parser.add_argument("-c", "--calib_path", required=True,
-                        help="JSON file for calibration images")
-    parser.add_argument("-t", "--test_path", required=True,
-                        help="JSON file for test images")
+    parser.add_argument("--dir", required=True,
+                        help="Directory containing train_annotations.json, "
+                             "test_annotations.json, and optionally metadata.json")
     parser.add_argument("--base_img_path", required=True,
                         help="Base directory prepended to image paths in JSON")
-    parser.add_argument("--landmark_names_path", default=None,
-                        help="Optional JSON file with landmark name strings. "
-                             "If omitted, names are landmark_0, landmark_1, …")
 
     # ── Embedding ────────────────────────────────────────────────────────────
     parser.add_argument("--level", choices=["patch", "pixel", "bilinear"], default="patch",
@@ -329,21 +330,23 @@ def main() -> None:
     methods = _parse_methods(args.methods)
 
     # ── Load JSON data ────────────────────────────────────────────────────────
-    calib_json = _load_json(args.calib_path)
-    test_json  = _load_json(args.test_path)
+    data_dir   = Path(args.dir)
+    train_path = data_dir / "train_annotations.json"
+    test_path  = data_dir / "test_annotations.json"
+    meta_path  = data_dir / "metadata.json"
+
+    calib_json = _load_json(train_path)
+    test_json  = _load_json(test_path)
 
     calib_img_paths = [os.path.join(args.base_img_path, e["img_path"]) for e in calib_json]
     test_img_paths  = [os.path.join(args.base_img_path, e["img_path"]) for e in test_json]
 
     n_landmarks = len(calib_json[0]["landmarks"])
 
-    if args.landmark_names_path:
-        landmark_names = _load_json(args.landmark_names_path)
-        if len(landmark_names) != n_landmarks:
-            raise ValueError(
-                f"landmark_names_path has {len(landmark_names)} entries "
-                f"but data has {n_landmarks} landmarks."
-            )
+    if meta_path.exists():
+        with open(meta_path) as f:
+            meta = json.load(f)
+        landmark_names = meta["landmark_names"]
     else:
         landmark_names = [f"landmark_{i}" for i in range(n_landmarks)]
 
