@@ -1,0 +1,12 @@
+{
+  "category": "chair",
+  "landmark_names": [
+    "back_upper_left",
+    "back_upper_right",
+    "seat_lower_right"
+  ],
+  "n_train": 100,
+  "n_test": 100,
+  "n_available": 201,
+  "seed": 42
+}

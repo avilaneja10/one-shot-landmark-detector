@@ -1,0 +1,902 @@
+[
+  {
+    "img_path": "tvmonitor_pascal/2011_000434.jpg",
+    "landmarks": [
+      [
+        121.11808118081181,
+        125.1540590405904
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_002232.jpg",
+    "landmarks": [
+      [
+        452.99077490774914,
+        295.9335793357934
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_000987.jpg",
+    "landmarks": [
+      [
+        118.4685230024213,
+        199.65254237288127
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_001580.jpg",
+    "landmarks": [
+      [
+        458.5258302583026,
+        271.9483394833949
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_000773.jpg",
+    "landmarks": [
+      [
+        235.7046004842615,
+        306.1900726392252
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005090.jpg",
+    "landmarks": [
+      [
+        352.2705811138015,
+        315.269975786925
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005254.jpg",
+    "landmarks": [
+      [
+        405.9428044280443,
+        275.6383763837639
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_004478.jpg",
+    "landmarks": [
+      [
+        326.60701107011073,
+        300.54612546125463
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_002872.jpg",
+    "landmarks": [
+      [
+        98.74723247232468,
+        220.28782287822875
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_008429.jpg",
+    "landmarks": [
+      [
+        279.404358353511,
+        240.81476997578687
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_001752.jpg",
+    "landmarks": [
+      [
+        299.85424354243537,
+        181.76014760147598
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_006288.jpg",
+    "landmarks": [
+      [
+        197.45571955719555,
+        203.68265682656826
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_002652.jpg",
+    "landmarks": [
+      [
+        343.2121771217712,
+        177.1476014760147
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_000336.jpg",
+    "landmarks": [
+      [
+        262.03136531365317,
+        230.65313653136525
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_000145.jpg",
+    "landmarks": [
+      [
+        437.90920096852307,
+        294.4467312348669
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_001452.jpg",
+    "landmarks": [
+      [
+        377.3450184501845,
+        264.78597785977854
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005967.jpg",
+    "landmarks": [
+      [
+        289.93726937269366,
+        162.16974169741695
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_007696.jpg",
+    "landmarks": [
+      [
+        411.47785977859786,
+        183.38745387453875
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_006668.jpg",
+    "landmarks": [
+      [
+        393.0276752767528,
+        225.8228782287823
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_002245.jpg",
+    "landmarks": [
+      [
+        325.6845018450185,
+        235.0479704797048
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_000591.jpg",
+    "landmarks": [
+      [
+        315.30627306273067,
+        54.120848708487074
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_003814.jpg",
+    "landmarks": [
+      [
+        480.0520581113801,
+        262.09200968523004
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_003437.jpg",
+    "landmarks": [
+      [
+        342.9939467312349,
+        306.06900726392246
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_002366.jpg",
+    "landmarks": [
+      [
+        382.88007380073805,
+        150.1771217712177
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2011_000965.jpg",
+    "landmarks": [
+      [
+        349.09550561797755,
+        225.92134831460677
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2011_002418.jpg",
+    "landmarks": [
+      [
+        338.59963099631,
+        68.99630996309958
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_003204.jpg",
+    "landmarks": [
+      [
+        219.35608856088558,
+        127.52952029520299
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_003213.jpg",
+    "landmarks": [
+      [
+        113.78413284132843,
+        168.21217712177128
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_004125.jpg",
+    "landmarks": [
+      [
+        320.95664206642067,
+        176.0073800738007
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005257.jpg",
+    "landmarks": [
+      [
+        301.5839483394834,
+        170.70295202952028
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_002069.jpg",
+    "landmarks": [
+      [
+        68.99630996309962,
+        131.72693726937263
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_002094.jpg",
+    "landmarks": [
+      [
+        477.89852398523976,
+        312.7564575645756
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_007332.jpg",
+    "landmarks": [
+      [
+        153.1752767527675,
+        224.90036900369003
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_001688.jpg",
+    "landmarks": [
+      [
+        360.739852398524,
+        204.60516605166052
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_004591.jpg",
+    "landmarks": [
+      [
+        339.75276752767536,
+        204.14391143911436
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_002139.jpg",
+    "landmarks": [
+      [
+        259.2638376383764,
+        232.28044280442802
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_002464.jpg",
+    "landmarks": [
+      [
+        456.68081180811805,
+        301.26383763837634
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_000674.jpg",
+    "landmarks": [
+      [
+        243.38740920096862,
+        262.00121065375293
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_007324.jpg",
+    "landmarks": [
+      [
+        300.77675276752774,
+        161.24723247232473
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_003883.jpg",
+    "landmarks": [
+      [
+        345.97970479704804,
+        98.51660516605159
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_008524.jpg",
+    "landmarks": [
+      [
+        484.3560885608855,
+        241.72324723247232
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_002140.jpg",
+    "landmarks": [
+      [
+        222.85023041474653,
+        312.92933947772656
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2011_002970.jpg",
+    "landmarks": [
+      [
+        365.9494382022472,
+        269.74157303370794
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_001357.jpg",
+    "landmarks": [
+      [
+        325.1694915254237,
+        218.1561743341405
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_004881.jpg",
+    "landmarks": [
+      [
+        431.7730627306274,
+        217.52029520295204
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_001682.jpg",
+    "landmarks": [
+      [
+        338.59963099631,
+        246.1180811808118
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_005133.jpg",
+    "landmarks": [
+      [
+        367.1974169741698,
+        291.3210332103321
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005255.jpg",
+    "landmarks": [
+      [
+        483.43357933579347,
+        291.3210332103321
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_004254.jpg",
+    "landmarks": [
+      [
+        474.2084870848709,
+        330.0664206642067
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005957.jpg",
+    "landmarks": [
+      [
+        498.1937269372694,
+        228.3081180811809
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_005310.jpg",
+    "landmarks": [
+      [
+        186.99515738498783,
+        259.24092009685216
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_007038.jpg",
+    "landmarks": [
+      [
+        497.27121771217713,
+        227.6678966789668
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_002193.jpg",
+    "landmarks": [
+      [
+        421.6254612546126,
+        196.30258302583027
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005678.jpg",
+    "landmarks": [
+      [
+        381.1179775280899,
+        324.51685393258435
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_002066.jpg",
+    "landmarks": [
+      [
+        379.1900369003689,
+        351.361623616236
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_002562.jpg",
+    "landmarks": [
+      [
+        322.9878934624699,
+        376.4079903147699
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005094.jpg",
+    "landmarks": [
+      [
+        86.06273062730627,
+        229.5129151291513
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_004137.jpg",
+    "landmarks": [
+      [
+        347.27419354838713,
+        120.64900153609824
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_005678.jpg",
+    "landmarks": [
+      [
+        424.3929889298893,
+        314.3837638376384
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_003191.jpg",
+    "landmarks": [
+      [
+        96.519975786925,
+        247.77602905569
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_003500.jpg",
+    "landmarks": [
+      [
+        359.3075060532689,
+        318.2966101694915
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_000449.jpg",
+    "landmarks": [
+      [
+        117.88929889298892,
+        194.91881918819178
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_007962.jpg",
+    "landmarks": [
+      [
+        209.2078651685393,
+        182.10112359550564
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_005256.jpg",
+    "landmarks": [
+      [
+        308.6460674157304,
+        163.56179775280904
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2011_001833.jpg",
+    "landmarks": [
+      [
+        62.47033898305088,
+        309.82203389830505
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_002742.jpg",
+    "landmarks": [
+      [
+        164.01476014760146,
+        84.10239852398522
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_005062.jpg",
+    "landmarks": [
+      [
+        176.95883777239712,
+        109.94915254237287
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_001127.jpg",
+    "landmarks": [
+      [
+        36.939114391143875,
+        119.73431734317344
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005191.jpg",
+    "landmarks": [
+      [
+        272.1789667896679,
+        231.35793357933576
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_004944.jpg",
+    "landmarks": [
+      [
+        113.7380073800738,
+        235.0479704797048
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_000305.jpg",
+    "landmarks": [
+      [
+        426.23800738007384,
+        158.47970479704796
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_002650.jpg",
+    "landmarks": [
+      [
+        319.08958837772394,
+        163.33292978208254
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_003157.jpg",
+    "landmarks": [
+      [
+        185.76513317191285,
+        180.58474576271198
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2011_002810.jpg",
+    "landmarks": [
+      [
+        85.60147601476014,
+        249.45202952029524
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_004109.jpg",
+    "landmarks": [
+      [
+        171.8560885608856,
+        163.84870848708488
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005006.jpg",
+    "landmarks": [
+      [
+        312.5593220338983,
+        320.71791767554475
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_006031.jpg",
+    "landmarks": [
+      [
+        345.97970479704804,
+        237.81549815498155
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_004128.jpg",
+    "landmarks": [
+      [
+        178.0830258302583,
+        330.9889298892989
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_003753.jpg",
+    "landmarks": [
+      [
+        405.9428044280443,
+        351.2841328413284
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_007987.jpg",
+    "landmarks": [
+      [
+        293.1937269372694,
+        77.76937269372695
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_003434.jpg",
+    "landmarks": [
+      [
+        448.37822878228786,
+        214.75276752767527
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_004306.jpg",
+    "landmarks": [
+      [
+        325.00076804915517,
+        114.50460829493079
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2011_002156.jpg",
+    "landmarks": [
+      [
+        172.8939114391144,
+        48.528136531365334
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_003585.jpg",
+    "landmarks": [
+      [
+        295.2416974169742,
+        271.9483394833949
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2011_000071.jpg",
+    "landmarks": [
+      [
+        340.67527675276756,
+        237.54059040590403
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_004301.jpg",
+    "landmarks": [
+      [
+        250.9612546125461,
+        247.96309963099634
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2011_001946.jpg",
+    "landmarks": [
+      [
+        146.37177121771217,
+        233.20295202952022
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_002586.jpg",
+    "landmarks": [
+      [
+        257.41881918819195,
+        106.81918819188189
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_002573.jpg",
+    "landmarks": [
+      [
+        267.3789346246973,
+        279.5556900726392
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2011_001928.jpg",
+    "landmarks": [
+      [
+        298.8870967741935,
+        145.84024577572956
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_004097.jpg",
+    "landmarks": [
+      [
+        269.64206642066415,
+        122.84778597785976
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_002409.jpg",
+    "landmarks": [
+      [
+        462.2158671586716,
+        178.2177121771217
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_001069.jpg",
+    "landmarks": [
+      [
+        391.1826568265683,
+        197.02029520295196
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_003874.jpg",
+    "landmarks": [
+      [
+        117.19741697416973,
+        219.58302583025824
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_003554.jpg",
+    "landmarks": [
+      [
+        208.98708487084866,
+        181.760147601476
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_003140.jpg",
+    "landmarks": [
+      [
+        260.18634686346866,
+        144.64206642066418
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005625.jpg",
+    "landmarks": [
+      [
+        139.56826568265683,
+        263.1845018450185
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2009_001809.jpg",
+    "landmarks": [
+      [
+        405.36623616236164,
+        78.9709409594096
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2008_005569.jpg",
+    "landmarks": [
+      [
+        102.64891041162228,
+        139.11985472154953
+      ]
+    ]
+  },
+  {
+    "img_path": "tvmonitor_pascal/2010_004545.jpg",
+    "landmarks": [
+      [
+        300.2785977859779,
+        236.2933579335794
+      ]
+    ]
+  }
+]

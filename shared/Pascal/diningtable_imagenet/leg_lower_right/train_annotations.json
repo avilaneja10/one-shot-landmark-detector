@@ -1,0 +1,902 @@
+[
+  {
+    "img_path": "diningtable_imagenet/n03201035_1157.JPEG",
+    "landmarks": [
+      [
+        436.5236220472441,
+        240.16535433070865
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_10254.JPEG",
+    "landmarks": [
+      [
+        821.9173228346455,
+        909.2664041994747
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_3573.JPEG",
+    "landmarks": [
+      [
+        431.02493438320226,
+        255.32939632545927
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_9560.JPEG",
+    "landmarks": [
+      [
+        254.69947506561687,
+        342.232283464567
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_8864.JPEG",
+    "landmarks": [
+      [
+        466.50262467191607,
+        331.1299212598425
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_8278.JPEG",
+    "landmarks": [
+      [
+        328.8464566929133,
+        189.8700787401574
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_7915.JPEG",
+    "landmarks": [
+      [
+        268.58923884514434,
+        222.57086614173232
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_3380.JPEG",
+    "landmarks": [
+      [
+        569.9488188976379,
+        309.7913385826771
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_11152.JPEG",
+    "landmarks": [
+      [
+        242.04986876640407,
+        430.2900262467191
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_1176.JPEG",
+    "landmarks": [
+      [
+        360.736220472441,
+        315.9527559055118
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_10130.JPEG",
+    "landmarks": [
+      [
+        1895.0091863517061,
+        1491.9855643044616
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_11659.JPEG",
+    "landmarks": [
+      [
+        431.6023622047245,
+        308.0787401574804
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_615.JPEG",
+    "landmarks": [
+      [
+        403.4152542372882,
+        414.95762711864404
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_72.JPEG",
+    "landmarks": [
+      [
+        441.3031496062992,
+        269.50787401574803
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_1014.JPEG",
+    "landmarks": [
+      [
+        875.3346456692913,
+        633.4448818897638
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_2414.JPEG",
+    "landmarks": [
+      [
+        281.0905511811023,
+        330.4409448818898
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_2894.JPEG",
+    "landmarks": [
+      [
+        329.91888619854717,
+        394.3861985472156
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_14173.JPEG",
+    "landmarks": [
+      [
+        529.0669291338584,
+        348.73228346456676
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_7801.JPEG",
+    "landmarks": [
+      [
+        303.1797900262467,
+        266.43438320209975
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_3211.JPEG",
+    "landmarks": [
+      [
+        257.4199475065617,
+        490.83202099737537
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_3776.JPEG",
+    "landmarks": [
+      [
+        354.9188861985472,
+        355.97820823244547
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_25246.JPEG",
+    "landmarks": [
+      [
+        349.90944881889766,
+        331.70078740157487
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_26945.JPEG",
+    "landmarks": [
+      [
+        421.7598425196851,
+        284.45669291338584
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_24017.JPEG",
+    "landmarks": [
+      [
+        372.24886849773696,
+        339.69783464566933
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_243.JPEG",
+    "landmarks": [
+      [
+        240.518372703412,
+        331.28215223097106
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_315.JPEG",
+    "landmarks": [
+      [
+        543.3653977307955,
+        409.96369892739796
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_1329.JPEG",
+    "landmarks": [
+      [
+        385.33070866141753,
+        477.70472440944866
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_22170.JPEG",
+    "landmarks": [
+      [
+        392.8884514435695,
+        275.1062992125984
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_6538.JPEG",
+    "landmarks": [
+      [
+        1095.783292978208,
+        1550.136803874092
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_10172.JPEG",
+    "landmarks": [
+      [
+        249.35564304461946,
+        138.95406824146977
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_27466.JPEG",
+    "landmarks": [
+      [
+        335.95066627170314,
+        417.254500175667
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_6687.JPEG",
+    "landmarks": [
+      [
+        243.34776902887134,
+        328.4527559055118
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_2909.JPEG",
+    "landmarks": [
+      [
+        371.89107611548553,
+        326.3136482939633
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_9716.JPEG",
+    "landmarks": [
+      [
+        253.32677165354335,
+        339.2414698162729
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_22432.JPEG",
+    "landmarks": [
+      [
+        361.5472440944883,
+        455.22440944881885
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_6212.JPEG",
+    "landmarks": [
+      [
+        336.29396325459334,
+        347.6128608923884
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_10725.JPEG",
+    "landmarks": [
+      [
+        487.92782152230967,
+        396.03805774278226
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_5825.JPEG",
+    "landmarks": [
+      [
+        169.4667896678967,
+        418.4612546125461
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_7205.JPEG",
+    "landmarks": [
+      [
+        427.9193548387097,
+        199.39247311827967
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_1893.JPEG",
+    "landmarks": [
+      [
+        174.86052776867467,
+        151.99133917315453
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_1832.JPEG",
+    "landmarks": [
+      [
+        676.1355932203389,
+        488.42857142857133
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_36030.JPEG",
+    "landmarks": [
+      [
+        295.61154855643053,
+        398.7939632545932
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_264.JPEG",
+    "landmarks": [
+      [
+        247.32414698162728,
+        440.06167979002623
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_4515.JPEG",
+    "landmarks": [
+      [
+        678.7047244094488,
+        474.9724409448819
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_5424.JPEG",
+    "landmarks": [
+      [
+        313.29133858267716,
+        282.33070866141725
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_7211.JPEG",
+    "landmarks": [
+      [
+        608.1771653543306,
+        298.82677165354335
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_1581.JPEG",
+    "landmarks": [
+      [
+        247.05905511811025,
+        392.3976377952756
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_3125.JPEG",
+    "landmarks": [
+      [
+        407.9015748031496,
+        276.3661417322836
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_5275.JPEG",
+    "landmarks": [
+      [
+        897.0538057742782,
+        866.7782152230975
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_3756.JPEG",
+    "landmarks": [
+      [
+        350.50000000000006,
+        255.40157480314963
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_29448.JPEG",
+    "landmarks": [
+      [
+        412.90157480314963,
+        299.22047244094495
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_634.JPEG",
+    "landmarks": [
+      [
+        490.5787401574804,
+        459.7125984251968
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_2619.JPEG",
+    "landmarks": [
+      [
+        440.269975786925,
+        307.8547215496368
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_10670.JPEG",
+    "landmarks": [
+      [
+        524.9750656167978,
+        434.22703412073497
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_3599.JPEG",
+    "landmarks": [
+      [
+        225.01443569553805,
+        244.85695538057735
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_12400.JPEG",
+    "landmarks": [
+      [
+        179.98303952163465,
+        450.91597490602385
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_33932.JPEG",
+    "landmarks": [
+      [
+        377.46850393700794,
+        210.63779527559058
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_37.JPEG",
+    "landmarks": [
+      [
+        275.65264265195196,
+        359.3187252774504
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_3723.JPEG",
+    "landmarks": [
+      [
+        381.9790026246718,
+        206.69422572178473
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_1677.JPEG",
+    "landmarks": [
+      [
+        91.05118110236221,
+        360.24409448818903
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_4407.JPEG",
+    "landmarks": [
+      [
+        53.984251968503976,
+        186.0118110236221
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_7142.JPEG",
+    "landmarks": [
+      [
+        758.4212598425197,
+        646.5472440944884
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_26690.JPEG",
+    "landmarks": [
+      [
+        336.12992125984255,
+        314.9685039370079
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_4701.JPEG",
+    "landmarks": [
+      [
+        55.24576271186447,
+        509.0835351089587
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_5866.JPEG",
+    "landmarks": [
+      [
+        399.3018372703413,
+        413.22965879265087
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_1921.JPEG",
+    "landmarks": [
+      [
+        769.6535433070866,
+        730.540682414698
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_1252.JPEG",
+    "landmarks": [
+      [
+        243.9488188976378,
+        237.71653543307087
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_19566.JPEG",
+    "landmarks": [
+      [
+        330.22440944881896,
+        355.32283464566933
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_7111.JPEG",
+    "landmarks": [
+      [
+        399.7952755905512,
+        583.9645669291341
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_2403.JPEG",
+    "landmarks": [
+      [
+        392.2887139107612,
+        461.7860892388452
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_10157.JPEG",
+    "landmarks": [
+      [
+        355.69160104986884,
+        361.5511811023622
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_7635.JPEG",
+    "landmarks": [
+      [
+        133.39501312335958,
+        177.39763779527556
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_23604.JPEG",
+    "landmarks": [
+      [
+        330.22440944881896,
+        320.8740157480315
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_6084.JPEG",
+    "landmarks": [
+      [
+        227.77165354330717,
+        290.65748031496065
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_30489.JPEG",
+    "landmarks": [
+      [
+        324.48293963254605,
+        316.11679790026244
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_1652.JPEG",
+    "landmarks": [
+      [
+        284.314513549773,
+        437.29948711878774
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_12470.JPEG",
+    "landmarks": [
+      [
+        160.44094488188983,
+        465.72309711286084
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_29002.JPEG",
+    "landmarks": [
+      [
+        398.0520581113802,
+        235.53510895883778
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_9475.JPEG",
+    "landmarks": [
+      [
+        1821.5984251968503,
+        1504.917322834645
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_2453.JPEG",
+    "landmarks": [
+      [
+        278.68110236220474,
+        295.30708661417333
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_19488.JPEG",
+    "landmarks": [
+      [
+        311.3595800524936,
+        449.9750656167979
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_8056.JPEG",
+    "landmarks": [
+      [
+        267.5748031496063,
+        270.1850393700788
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_12072.JPEG",
+    "landmarks": [
+      [
+        219.988188976378,
+        323.82677165354335
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_6575.JPEG",
+    "landmarks": [
+      [
+        236.95669291338584,
+        236.25459317585302
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_2930.JPEG",
+    "landmarks": [
+      [
+        346.06692913385825,
+        283.1614173228347
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_10510.JPEG",
+    "landmarks": [
+      [
+        440.1850393700788,
+        455.93307086614175
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_4027.JPEG",
+    "landmarks": [
+      [
+        425.8228346456693,
+        525.1574803149606
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_11047.JPEG",
+    "landmarks": [
+      [
+        397.0091863517061,
+        267.15091863517057
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_1608.JPEG",
+    "landmarks": [
+      [
+        224.86904767002736,
+        384.7850538553931
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_3171.JPEG",
+    "landmarks": [
+      [
+        309.1614173228347,
+        447.11417322834643
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_4980.JPEG",
+    "landmarks": [
+      [
+        200.86220472440942,
+        395.75196850393706
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_9545.JPEG",
+    "landmarks": [
+      [
+        551.8510895883777,
+        682.8910411622276
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_12822.JPEG",
+    "landmarks": [
+      [
+        208.76771653543312,
+        244.20078740157481
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201035_2656.JPEG",
+    "landmarks": [
+      [
+        412.8490813648293,
+        455.67060367454064
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_1361.JPEG",
+    "landmarks": [
+      [
+        1856.6355932203387,
+        1777.4007263922517
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_17861.JPEG",
+    "landmarks": [
+      [
+        222.12361825524462,
+        348.4644937267854
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_3520.JPEG",
+    "landmarks": [
+      [
+        1271.2021791767554,
+        1030.5242130750605
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03202354_2607.JPEG",
+    "landmarks": [
+      [
+        129.10892388451447,
+        356.9304461942256
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n04379964_11068.JPEG",
+    "landmarks": [
+      [
+        256.97637795275585,
+        282.9199475065616
+      ]
+    ]
+  },
+  {
+    "img_path": "diningtable_imagenet/n03201208_20531.JPEG",
+    "landmarks": [
+      [
+        279.86089238845153,
+        365.98556430446206
+      ]
+    ]
+  }
+]
