@@ -1,3 +1,4 @@
+from __future__ import annotations
 from oneshotlandmark.model import ViTModel
 from oneshotlandmark.embeddings.patch import PatchEmbeddingGenerator
 from oneshotlandmark.embeddings.pixel import PixelEmbeddingGenerator
