@@ -34,63 +34,61 @@ class ScoreGenerator:
         self.device = device
         self.verbose = verbose
     
-    def generate_calib_scores(self, embeddings: list[torch.Tensor], landmarks: list[list[float]], 
-                              xy_maps: list[dict], return_all_scores: bool = False) -> np.ndarray | tuple[np.ndarray, np.ndarray]:
+    def generate_calib_scores(self, embeddings: list[torch.Tensor], landmarks: list[list[float]],
+                              xy_maps: list[dict], return_all_scores: bool = False,
+                              return_ragged: bool = False) -> np.ndarray | tuple[np.ndarray, np.ndarray | list]:
         """
         Compute calibration nonconformity scores (leave-one-out).
- 
+
         For each calibration image j, every other calibration source i
         scores against all K_j candidates in image j. The true-label score
         is extracted, and the self-score (i == j) is set to inf.
- 
+
         Args:
             embeddings: List of N tensors, each (K_j, D).
             landmarks: List of N [x, y] coordinates (ground truth).
             xy_maps: List of N dicts mapping (x, y) -> index.
             return_all_scores: If True, also return the full (N, N, K_max)
-                matrix of scores over all candidates (needed for model-selection
-                methods). WARNING: this can be very large at pixel level.
- 
+                padded matrix. WARNING: very large at pixel level.
+            return_ragged: If True, return calib_all_list — a list of N
+                arrays each (N, K_j) with self-rows set to inf, without any
+                padding. Mutually exclusive with return_all_scores; takes
+                precedence when both are True.
+
         Returns:
-            calib_true_matrix: (N, N) array of true-label nonconformity scores,
-                with diagonal set to inf.
-            calib_all_matrix (only if return_all_scores=True): (N, N, K_max)
-                array of all-candidate scores, with diagonal slices set to inf.
+            calib_true_matrix: (N, N) array, diagonal = inf.
+            calib_all_matrix (only if return_all_scores=True): (N, N, K_max).
+            calib_all_list (only if return_ragged=True): list of N (N, K_j) arrays.
         """
         start = time.perf_counter()
         N = len(embeddings)
 
-        # Extract ground truth pixel number given the ground truth landmark
         gt_indices = get_landmark_indices(landmarks, xy_maps)
-
-        # Extract the ground truth landmark embeddings
         lm_embeddings = extract_landmark_embeddings(landmarks, embeddings, xy_maps)
 
         with torch.no_grad():
             Q = torch.stack(lm_embeddings, dim=0).to(self.device)  # (N, D)
- 
+
             if not self.apply_softmax:
                 calib_true_matrix = self._calib_scores_no_softmax(Q, N)
-                if return_all_scores:
+                if return_all_scores or return_ragged:
                     raise NotImplementedError(
-                        "return_all_scores requires apply_softmax=True. "
-                        "Without softmax, there is no per-target normalization "
-                        "over candidates."
+                        "return_all_scores/return_ragged require apply_softmax=True."
                     )
+                calib_extra = None
             else:
-                calib_true_matrix, calib_all_matrix = self._calib_scores_softmax(
-                    Q, embeddings, gt_indices, N, return_all_scores
+                calib_true_matrix, calib_extra = self._calib_scores_softmax(
+                    Q, embeddings, gt_indices, N, return_all_scores, return_ragged
                 )
- 
+
         np.fill_diagonal(calib_true_matrix, np.inf)
 
         elapsed = time.perf_counter() - start
         logger.info(f"Calibration scores ({N}x{N}): {elapsed:.2f}s")
- 
-        if not return_all_scores:
-            return calib_true_matrix
- 
-        return calib_true_matrix, calib_all_matrix
+
+        if return_ragged or return_all_scores:
+            return calib_true_matrix, calib_extra
+        return calib_true_matrix
     
     def _calib_scores_no_softmax(self, Q: torch.Tensor, N: int) -> np.ndarray:
         """
@@ -103,45 +101,49 @@ class ScoreGenerator:
         return (1.0 - cos_sims).cpu().numpy()
     
     def _calib_scores_softmax(self, Q: torch.Tensor, embeddings: list[torch.Tensor], gt_indices: list[int], N: int,
-        return_all_scores: bool) -> tuple[np.ndarray, np.ndarray | None]:
+        return_all_scores: bool, return_ragged: bool = False) -> tuple[np.ndarray, np.ndarray | list | None]:
         """
         Standard path: for each target j, compute softmax-normalized scores
         from all sources against all K_j candidates in target j.
 
-        return_all_scores is required for modsel_cp, yk_baseline like methods
-        SCOS and CAOS doesn't require this.
+        return_all_scores is required for modsel_cp, yk_baseline like methods.
+        return_ragged returns the raw list of (N, K_j) arrays without padding.
+        SCOS and CAOS don't require either.
         """
         calib_true_scores = np.empty((N, N), dtype=np.float64)
-        calib_all_list = [] if return_all_scores else None
- 
+        collect_all = return_all_scores or return_ragged
+        calib_all_list = [] if collect_all else None
+
         iterator = (
             tqdm(range(N), desc="Calibration scores", leave=False)
             if self.verbose
             else range(N)
         )
- 
+
         for j in iterator:
             all_candidates_gpu = embeddings[j].to(self.device)  # (K_j, D)
             cos_sims = Q @ all_candidates_gpu.T  # (N, K_j)
- 
+
             # Mask self-score before softmax so it doesn't affect normalization
             cos_sims[j, :] = torch.finfo(cos_sims.dtype).min
- 
+
             cos_sims = torch.softmax(cos_sims / self.temperature, dim=1)
             scores = 1.0 - cos_sims  # (N, K_j)
- 
-            # Extract true-label score for target j
+
             calib_true_scores[:, j] = scores[:, gt_indices[j]].cpu().numpy()
- 
-            if return_all_scores:
-                calib_all_list.append(scores.cpu().numpy())  # (N, K_j)
- 
+
+            if collect_all:
+                calib_all_list.append(scores.cpu().numpy().astype(np.float32))  # (N, K_j)
+
             del all_candidates_gpu, cos_sims, scores
- 
-        # Build all-label matrix if requested
-        calib_all_matrix = None
+
+        if return_ragged:
+            # Set self-rows to inf so callers can use list directly
+            for i in range(N):
+                calib_all_list[i][i, :] = np.inf
+            return calib_true_scores, calib_all_list
+
         if return_all_scores:
-            # Since images can be of different sizes
             K_max = max(arr.shape[1] for arr in calib_all_list)
             mem_gb = estimate_memory_gb((N, N, K_max))
             logger.info(
@@ -155,8 +157,9 @@ class ScoreGenerator:
                 calib_all_matrix[i, i, :] = np.inf
             del calib_all_list
             gc.collect()
- 
-        return calib_true_scores, calib_all_matrix
+            return calib_true_scores, calib_all_matrix
+
+        return calib_true_scores, None
     
     def generate_eval_scores(self, test_embeddings: list[torch.Tensor], calib_lm_embeddings: list[torch.Tensor],) -> list[np.ndarray]:
         """
