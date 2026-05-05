@@ -1,0 +1,56 @@
+{
+  "dataset": "mini_cephalometric",
+  "landmark_names": [
+    "sella",
+    "nasion",
+    "orbitale",
+    "porion",
+    "subspinale",
+    "supramentale",
+    "pogonion",
+    "menton",
+    "gnathion",
+    "gonion",
+    "lower_incisor_tip",
+    "upper_incisor_tip",
+    "upper_lip",
+    "lower_lip",
+    "subnasale",
+    "soft_tissue_pogonion",
+    "nasal_tip",
+    "articulare",
+    "basion"
+  ],
+  "landmark_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "n_landmarks": 19,
+  "n_train": 100,
+  "n_test": 100,
+  "seed": 42,
+  "train_subsets": [
+    "TrainingData"
+  ],
+  "test_subsets": [
+    "Test2Data"
+  ],
+  "annotation_source": "400_senior"
+}
