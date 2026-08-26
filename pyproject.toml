@@ -12,7 +12,8 @@ dependencies = [
     "tqdm",
     "transformers",
     "Pillow",
-    "huggingface_hub"
+    "huggingface_hub",
+    "cp4icl"
 ]
 
 [tool.setuptools.packages.find]
