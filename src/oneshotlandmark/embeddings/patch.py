@@ -1,4 +1,5 @@
 from oneshotlandmark.embeddings.base import BaseEmbeddingGenerator
+from oneshotlandmark.embeddings.xy_map import LazyXYMapping
 import torch
 from oneshotlandmark.utils import load_image, pad_to_multiple
 import torch.nn.functional as F
@@ -77,7 +78,9 @@ class PatchEmbeddingGenerator(BaseEmbeddingGenerator):
         patch_tokens = F.normalize(patch_tokens, p=2, dim=1, eps=1e-8)  # (K, D)
  
         # Build pixel-to-patch-index mapping for the original (unpadded) image
-        xy_to_index = self._build_xy_map(orig_w, orig_h, grid_cols)
+        xy_to_index = LazyXYMapping("patch", orig_w, orig_h,
+                            patch_size=self.patch_size,
+                            grid_cols=grid_cols, grid_rows=grid_rows)
 
         elapsed = time.perf_counter() - start
         logger.debug(
@@ -86,30 +89,3 @@ class PatchEmbeddingGenerator(BaseEmbeddingGenerator):
         )
         
         return patch_tokens, xy_to_index
-    
-    def _build_xy_map(self, orig_w: int, orig_h: int, grid_cols: int) -> dict:
-        """
-        Map every pixel (x, y) in the original image to the flat index of the
-        patch that contains it.
- 
-        Patch layout is row-major:
-            flat_index = (y // patch_size) * grid_cols + (x // patch_size)
- 
-        Args:
-            orig_w: Original image width in pixels.
-            orig_h: Original image height in pixels.
-            grid_cols: Number of patch columns in the padded grid.
- 
-        Returns:
-            Dict mapping (x, y) -> flat patch index.
-
-        TODO : This is a mapping from pixel to patch index. Though we don't require it at pixel level
-        for now, to maintain symmetry across pixel and patch generators, keeping it like this
-        """
-        ps = self.patch_size
-        xy_to_index = {}
-        for y in range(orig_h):
-            row_offset = (y // ps) * grid_cols
-            for x in range(orig_w):
-                xy_to_index[(x, y)] = row_offset + (x // ps)
-        return xy_to_index

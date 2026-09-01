@@ -1,4 +1,5 @@
 from oneshotlandmark.embeddings.base import BaseEmbeddingGenerator
+from oneshotlandmark.embeddings.xy_map import LazyXYMapping
 import torch
 import torch.nn.functional as F
 from oneshotlandmark.utils import load_image, pad_to_multiple
@@ -173,11 +174,7 @@ class BilinearEmbeddingGenerator(BaseEmbeddingGenerator):
         # ------------------------------------------------------------------
         # Step 8: xy_to_index — column-major, matching pixel.py exactly
         # ------------------------------------------------------------------
-        xy_to_index = {
-            (x, y): x * orig_h + y
-            for x in range(orig_w)
-            for y in range(orig_h)
-        }
+        xy_to_index = LazyXYMapping("colmajor", orig_w, orig_h)
 
         elapsed = time.perf_counter() - start
         logger.debug(
