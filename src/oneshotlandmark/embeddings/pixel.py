@@ -1,5 +1,6 @@
 from __future__ import annotations
 from oneshotlandmark.embeddings.base import BaseEmbeddingGenerator
+from oneshotlandmark.embeddings.xy_map import LazyXYMapping
 import logging
 import time
 import torch
@@ -145,7 +146,6 @@ class PixelEmbeddingGenerator(BaseEmbeddingGenerator):
         D = grid_embeddings[0].shape[2]
         K = orig_w * orig_h
         embeddings = torch.zeros(K, D)
-        xy_to_index = {}
  
         ps = self.patch_size
         center_offset = ps // 2
@@ -167,13 +167,12 @@ class PixelEmbeddingGenerator(BaseEmbeddingGenerator):
  
                     flat_idx = orig_x * orig_h + orig_y
                     embeddings[flat_idx] = grid_emb[row, col]
-                    xy_to_index[(orig_x, orig_y)] = flat_idx
  
+        xy_to_index = LazyXYMapping("colmajor", orig_w, orig_h)
         logger.debug(
             f"Pixel mapping: {len(xy_to_index)} pixels, "
             f"{time.perf_counter() - t_map:.3f}s"
         )
- 
         elapsed = time.perf_counter() - start
         logger.debug(
             f"Pixel embedding for '{img_path}': K={embeddings.shape[0]}, "
