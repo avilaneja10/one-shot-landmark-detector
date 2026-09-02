@@ -2,7 +2,7 @@ from __future__ import annotations
 """
 Utility functions for nonconformity score generation.
 
-This module provides helpers used by the ScoreGenerator class for:
+This module provides helpers used by the score generator classes for:
 - Extracting landmark embeddings and indices from xy_to_index maps
 - Converting ragged score arrays into padded matrices for cp4icl
 - Removing self-scores for leave-one-out calibration methods

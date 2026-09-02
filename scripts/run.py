@@ -3,7 +3,10 @@ from oneshotlandmark.model import ViTModel
 from oneshotlandmark.embeddings.patch import PatchEmbeddingGenerator
 from oneshotlandmark.embeddings.pixel import PixelEmbeddingGenerator
 from oneshotlandmark.embeddings.bilinear_interpolation import BilinearEmbeddingGenerator
-from oneshotlandmark.scores.generator import ScoreGenerator
+from oneshotlandmark.scores.cosine_softmax import CosineSoftmaxScoreGenerator
+from oneshotlandmark.scores.per_source_distance import PerSourceDistanceScoreGenerator
+from oneshotlandmark.scores.fused_distance import FusedDistanceScoreGenerator
+from oneshotlandmark.scores import cp_k_for_score
 from oneshotlandmark.scores.utils import extract_landmark_embeddings, get_landmark_indices, remove_self_2d
 from oneshotlandmark.gpu_pixel_cp import (
     caos_ragged,
@@ -73,7 +76,7 @@ def load_data(calib_path, test_path, base_img_path, landmark_idx):
 
 def run(calib_img_paths, test_img_paths, calib_lms, test_lms, level="patch",
         alpha=0.1, temperature=0.05, patch_size=16, apply_softmax=True,
-        normalize=True, k=3, device="cuda", methods=None):
+        normalize=True, k=3, device="cuda", methods=None, score="cosine", metric="manhattan"):
     """
     Run conformal prediction pipeline.
 
@@ -118,7 +121,19 @@ def run(calib_img_paths, test_img_paths, calib_lms, test_lms, level="patch",
     else:
         raise ValueError(f"Unknown level: {level}. Must be 'patch', 'pixel', or 'bilinear'.")
 
-    score_gen = ScoreGenerator(apply_softmax=apply_softmax, temperature=temperature, device=device)
+    if score == "distance_fused":
+        # Scheme B fuses sources into one peak, and only CAOS can consume its
+        # degenerate single-source scores; k here is the FUSION k.
+        if methods - {"caos"}:
+            raise ValueError(
+                "score='distance_fused' (Scheme B) only supports method 'caos'; "
+                f"got {sorted(methods)}."
+            )
+        score_gen = FusedDistanceScoreGenerator(metric=metric, k=k, device=device)
+    elif score == "distance":
+        score_gen = PerSourceDistanceScoreGenerator(metric=metric, device=device)
+    else:
+        score_gen = CosineSoftmaxScoreGenerator(apply_softmax=apply_softmax, temperature=temperature, device=device)
 
     # ==================================================================
     # Phase 2: Calibration embeddings + scores  (ragged)
@@ -150,7 +165,7 @@ def run(calib_img_paths, test_img_paths, calib_lms, test_lms, level="patch",
     test_embs, test_xy_maps = emb_gen.generate_embedding_all(test_img_paths)
 
     logger.info("Computing evaluation scores")
-    eval_scores_list = score_gen.generate_eval_scores(test_embs, calib_lm_embs)
+    eval_scores_list = score_gen.generate_eval_scores(test_embs, calib_lm_embs, test_xy_maps)
     # eval_scores_list: list of M arrays, each (K_m, N) — kept ragged, no padding
 
     del test_embs
@@ -179,10 +194,12 @@ def run(calib_img_paths, test_img_paths, calib_lms, test_lms, level="patch",
     }
 
     if "caos" in methods:
+        # Scheme B ("distance_fused") already fused the sources in the generator, so
+        # the CP stage must not aggregate again — cp_k_for_score pins it to 1.
         r = caos_ragged(
             alpha=alpha, calib_scores=calib_true_matrix,
             eval_scores_list=eval_scores_list, y_eval=test_labels,
-            k=k_used, device=device,
+            k=cp_k_for_score(score, k_used), device=device,
         )
         results["coverage_caos"]     = r.coverage
         results["avg_set_size_caos"] = r.avg_set_size
@@ -266,6 +283,12 @@ def main():
                         help="Embedding granularity")
 
     # Score computation
+    parser.add_argument("--score", choices=["cosine", "distance", "distance_fused"], default="cosine",
+                        help="Scoring family: softmax classification (cosine), Scheme A "
+                             "distance-to-peak (distance), or Scheme B fused-peak distance "
+                             "(distance_fused; CAOS only, CP k forced to 1)")
+    parser.add_argument("--metric", choices=["manhattan", "euclidean", "chebyshev"], default="manhattan",
+                        help="Distance metric (only used when --score distance)")
     parser.add_argument("--temperature", type=float, default=0.05,
                         help="Softmax temperature")
     parser.add_argument("--softmax", action=argparse.BooleanOptionalAction, default=True,
@@ -325,6 +348,8 @@ def main():
         k=args.k,
         device=args.device,
         methods=methods,
+        score = args.score,
+        metric = args.metric
     )
 
     print("\n" + "=" * 60)
@@ -342,13 +367,15 @@ def main():
         os.makedirs(os.path.dirname(args.output_path) or ".", exist_ok=True)
 
         fieldnames = [
-            "level", "landmark_idx", "alpha", "temperature", "patch_size",
+            "level", "score", "metric", "landmark_idx", "alpha", "temperature", "patch_size",
             "apply_softmax", "normalize", "k", "n_calib", "n_test",
             "method", "coverage", "avg_set_size", "total_time_seconds",
         ]
 
         base_row = {
             "level":              args.level,
+            "score":              args.score,
+            "metric":             args.metric,
             "landmark_idx":       args.landmark_idx,
             "alpha":              args.alpha,
             "temperature":        args.temperature,
