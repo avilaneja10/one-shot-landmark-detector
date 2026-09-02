@@ -10,7 +10,7 @@ from oneshotlandmark.scores.utils import get_landmark_indices, extract_landmark_
 logger = logging.getLogger(__name__)
 
 
-class ScoreGenerator:
+class CosineSoftmaxScoreGenerator:
     """
     Computes nonconformity scores from pre-generated embeddings.
  
@@ -162,7 +162,7 @@ class ScoreGenerator:
 
         return calib_true_scores, None
     
-    def generate_eval_scores(self, test_embeddings: list[torch.Tensor], calib_lm_embeddings: list[torch.Tensor],) -> list[np.ndarray]:
+    def generate_eval_scores(self, test_embeddings: list[torch.Tensor], calib_lm_embeddings: list[torch.Tensor],xy_maps: list | None = None,) -> list[np.ndarray]:
         """
         Compute evaluation nonconformity scores for all test images.
  

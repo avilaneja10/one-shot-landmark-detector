@@ -48,7 +48,10 @@ from oneshotlandmark.model import ViTModel
 from oneshotlandmark.embeddings.patch import PatchEmbeddingGenerator
 from oneshotlandmark.embeddings.pixel import PixelEmbeddingGenerator
 from oneshotlandmark.embeddings.bilinear_interpolation import BilinearEmbeddingGenerator
-from oneshotlandmark.scores.generator import ScoreGenerator
+from oneshotlandmark.scores.cosine_softmax import CosineSoftmaxScoreGenerator
+from oneshotlandmark.scores.per_source_distance import PerSourceDistanceScoreGenerator
+from oneshotlandmark.scores.fused_distance import FusedDistanceScoreGenerator
+from oneshotlandmark.scores import cp_k_for_score
 from oneshotlandmark.scores.utils import (
     extract_landmark_embeddings,
     get_landmark_indices,
@@ -71,7 +74,8 @@ ALL_METHODS     = ONESHOT_METHODS | MODSEL_METHODS
 
 _CSV_FIELDS = [
     "landmark_idx", "landmark_name",
-    "level", "alpha", "temperature", "patch_size", "apply_softmax", "normalize", "k",
+    "level", "score", "metric",
+    "alpha", "temperature", "patch_size", "apply_softmax", "normalize", "k",
     "n_calib", "n_test",
     "method", "coverage", "avg_set_size",
     "landmark_time_seconds",
@@ -130,7 +134,8 @@ def run_single_landmark(
     calib_xy_maps: list[dict],
     test_embs: list[torch.Tensor],
     test_xy_maps: list[dict],
-    score_gen: ScoreGenerator,
+    score_gen: CosineSoftmaxScoreGenerator,
+    score: str,
     alpha: float,
     k: int,
     methods: set[str],
@@ -173,7 +178,7 @@ def run_single_landmark(
 
     # ── Eval scores (already ragged — no padding needed) ─────────────────────
     logger.info(f"[lm {lm_idx}] Computing eval scores")
-    eval_scores_list = score_gen.generate_eval_scores(test_embs, calib_lm_embs)
+    eval_scores_list = score_gen.generate_eval_scores(test_embs, calib_lm_embs, test_xy_maps)
     # eval_scores_list: list of M arrays, each (K_m, N)
 
     # ── Test labels ──────────────────────────────────────────────────────────
@@ -187,10 +192,12 @@ def run_single_landmark(
     results = {"n_calib": N, "n_test": M}
 
     if "caos" in methods:
+        # Scheme B ("distance_fused") already fused the sources in the generator, so
+        # the CP stage must not aggregate again — cp_k_for_score pins it to 1.
         r = caos_ragged(
             alpha=alpha, calib_scores=calib_true_matrix,
             eval_scores_list=eval_scores_list, y_eval=test_labels,
-            k=k_used, device=device,
+            k=cp_k_for_score(score, k_used), device=device,
         )
         results["coverage_caos"]     = r.coverage
         results["avg_set_size_caos"] = r.avg_set_size
@@ -293,6 +300,12 @@ def main() -> None:
                         help="Mean-centre embeddings before L2 normalisation")
 
     # ── Scoring ──────────────────────────────────────────────────────────────
+    parser.add_argument("--score", choices=["cosine", "distance", "distance_fused"], default="cosine",
+                        help="Scoring family: softmax classification (cosine), Scheme A "
+                             "distance-to-peak (distance), or Scheme B fused-peak distance "
+                             "(distance_fused; CAOS only, CP k forced to 1)")
+    parser.add_argument("--metric", choices=["manhattan", "euclidean", "chebyshev"], default="manhattan",
+                        help="Distance metric (only used when --score distance)")
     parser.add_argument("--temperature", type=float, default=0.05,
                         help="Softmax temperature for nonconformity scores")
     parser.add_argument("--softmax", action=argparse.BooleanOptionalAction, default=True,
@@ -362,11 +375,23 @@ def main() -> None:
     logger.info("Initialising ViT model")
     model     = ViTModel(device_str=args.device)
     emb_gen   = _build_emb_gen(model, args.level, args.patch_size, args.normalize, verbose=True)
-    score_gen = ScoreGenerator(
-        apply_softmax=args.softmax,
-        temperature=args.temperature,
-        device=args.device,
-    )
+    if args.score == "distance_fused":
+        # Scheme B fuses sources into one peak; only CAOS can consume its
+        # degenerate single-source scores, and args.k is the FUSION k here.
+        if methods - {"caos"}:
+            raise ValueError(
+                "--score distance_fused (Scheme B) only supports --methods caos; "
+                f"got {sorted(methods)}."
+            )
+        score_gen = FusedDistanceScoreGenerator(metric=args.metric, k=args.k, device=args.device)
+    elif args.score == "distance":
+        score_gen = PerSourceDistanceScoreGenerator(metric=args.metric, device=args.device)
+    else:
+        score_gen = CosineSoftmaxScoreGenerator(
+            apply_softmax=args.softmax,
+            temperature=args.temperature,
+            device=args.device,
+        )
 
     # ── Generate embeddings ONCE ──────────────────────────────────────────────
     t_total_start = time.perf_counter()
@@ -414,6 +439,7 @@ def main() -> None:
                 test_embs=test_embs,
                 test_xy_maps=test_xy_maps,
                 score_gen=score_gen,
+                score=args.score,
                 alpha=args.alpha,
                 k=args.k,
                 methods=methods,
@@ -442,6 +468,8 @@ def main() -> None:
                     "landmark_idx":          lm_idx,
                     "landmark_name":         lm_name,
                     "level":                 args.level,
+                    "score":                 args.score,
+                    "metric":                args.metric,
                     "alpha":                 args.alpha,
                     "temperature":           args.temperature,
                     "patch_size":            args.patch_size,
@@ -466,7 +494,8 @@ def main() -> None:
             if writer:
                 base = {
                     "landmark_idx": lm_idx, "landmark_name": lm_name,
-                    "level": args.level, "alpha": args.alpha,
+                    "level": args.level, "score": args.score, "metric": args.metric,
+                    "alpha": args.alpha,
                     "temperature": args.temperature, "patch_size": args.patch_size,
                     "apply_softmax": args.softmax, "normalize": args.normalize,
                     "k": args.k, "n_calib": "", "n_test": "",
